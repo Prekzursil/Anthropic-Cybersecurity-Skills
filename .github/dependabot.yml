@@ -1,0 +1,9 @@
+# Fleet security standard: weekly updates for every ecosystem present,
+# zero ignored updates (semver-major updates are never ignored).
+# This repository contains no package-manager manifests beyond GitHub Actions.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
