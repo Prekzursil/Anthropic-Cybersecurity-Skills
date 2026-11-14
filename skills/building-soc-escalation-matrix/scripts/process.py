@@ -6,8 +6,6 @@ Builds escalation matrices, simulates incident routing,
 and tracks SLA compliance for SOC operations.
 """
 
-import json
-from datetime import datetime, timedelta
 
 
 SEVERITY_CONFIG = {

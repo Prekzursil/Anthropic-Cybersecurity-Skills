@@ -7,12 +7,8 @@ conditional access policies, and generates identity maturity reports.
 """
 
 import json
-import csv
-import sys
-from datetime import datetime, timedelta
 from pathlib import Path
 from collections import defaultdict
-from typing import Optional
 
 
 def assess_mfa_strength(mfa_config: dict) -> dict:

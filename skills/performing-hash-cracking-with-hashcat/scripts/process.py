@@ -17,13 +17,11 @@ Usage:
 
 import os
 import re
-import sys
 import json
 import hashlib
 import argparse
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 from collections import Counter
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")

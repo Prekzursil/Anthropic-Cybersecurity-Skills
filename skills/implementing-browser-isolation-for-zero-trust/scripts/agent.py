@@ -13,8 +13,6 @@ import uuid
 import hashlib
 import argparse
 import re
-from datetime import datetime, timedelta
-from copy import deepcopy
 
 
 # ---------------------------------------------------------------------------

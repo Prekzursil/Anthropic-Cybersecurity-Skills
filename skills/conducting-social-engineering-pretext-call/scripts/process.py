@@ -6,12 +6,10 @@ Tracks vishing (pretext call) campaign results, calculates susceptibility
 metrics, and generates reports for security awareness improvement.
 """
 
-import json
 import os
 import csv
 from datetime import datetime
 from collections import defaultdict
-from dataclasses import dataclass, field, asdict
 
 
 @dataclass

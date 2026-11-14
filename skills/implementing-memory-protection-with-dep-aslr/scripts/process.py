@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Memory Protection Auditor - Checks exploit mitigation status on Windows."""
 
-import json, subprocess, sys, os
 from datetime import datetime
 
 

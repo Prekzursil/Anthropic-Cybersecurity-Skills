@@ -11,7 +11,6 @@ import json
 import os
 import subprocess
 import sys
-from datetime import datetime, timezone, timedelta
 
 
 def check_veeam_backups(server_url, token):

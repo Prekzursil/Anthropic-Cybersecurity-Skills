@@ -11,7 +11,6 @@ import os
 import sys
 import urllib.request
 import urllib.error
-from datetime import datetime, timedelta
 from collections import defaultdict
 
 

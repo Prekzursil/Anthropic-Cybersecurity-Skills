@@ -15,7 +15,6 @@ import time
 import urllib.request
 import urllib.error
 import ssl
-from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
 
 
