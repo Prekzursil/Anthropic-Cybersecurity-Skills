@@ -14,15 +14,11 @@ Usage:
 """
 
 import os
-import sys
-import json
 import time
 import struct
-import hashlib
 import argparse
 import logging
 from dataclasses import dataclass, field
-from typing import Dict, Optional, Tuple, List
 
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey, X25519PublicKey
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF

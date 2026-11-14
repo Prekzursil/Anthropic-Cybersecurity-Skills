@@ -6,9 +6,7 @@ Audits Duo MFA deployment configuration, checks policy compliance,
 detects MFA fatigue patterns, and monitors authentication health.
 """
 
-import json
 import datetime
-from typing import Dict, List, Optional
 from dataclasses import dataclass, field
 from collections import defaultdict
 

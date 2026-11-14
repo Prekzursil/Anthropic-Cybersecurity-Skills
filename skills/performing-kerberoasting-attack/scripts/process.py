@@ -18,7 +18,6 @@ Requirements:
 """
 
 import argparse
-import json
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -118,9 +117,6 @@ def request_tgs_tickets(domain: str, dc_ip: str, username: str, password: str, t
     """Request TGS tickets for SPN accounts using Impacket."""
     try:
         from impacket.krb5.kerberosv5 import getKerberosTGT, getKerberosTGS
-        from impacket.krb5 import constants
-        from impacket.krb5.types import Principal, KerberosTime
-        from impacket import version
         import impacket.krb5.asn1
 
         console.print("[yellow][*] Requesting TGS tickets via Impacket...[/yellow]")

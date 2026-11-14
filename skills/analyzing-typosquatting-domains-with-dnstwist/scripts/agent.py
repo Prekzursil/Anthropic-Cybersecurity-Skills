@@ -2,7 +2,6 @@
 """Typosquatting domain detection agent using dnstwist concepts."""
 
 import os, sys, json, socket
-from datetime import datetime
 
 try:
     import dnstwist as dnstwist_lib

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Windows Event Logging Auditor - Checks current audit policy configuration."""
 
-import json, subprocess, sys, os
-from datetime import datetime
 
 
 def get_audit_policy() -> dict:

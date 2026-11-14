@@ -15,12 +15,8 @@ Usage:
 import argparse
 import json
 import re
-import sys
-import hashlib
 from datetime import datetime, timezone
-from pathlib import Path
 from dataclasses import dataclass, field, asdict
-from typing import Optional
 from collections import defaultdict
 
 try:

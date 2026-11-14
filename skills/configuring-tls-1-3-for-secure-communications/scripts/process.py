@@ -17,18 +17,14 @@ Usage:
 
 import os
 import ssl
-import sys
 import json
 import socket
 import argparse
 import logging
-import subprocess
 import datetime
 from pathlib import Path
-from typing import Optional, Dict, List
 
 from cryptography import x509
-from cryptography.x509.oid import NameOID, ExtensionOID
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec, rsa
 

@@ -6,9 +6,6 @@ Provides alert triage scoring, classification assistance,
 and triage workflow management for Elastic Security alerts.
 """
 
-import json
-from datetime import datetime, timedelta
-from typing import Optional
 
 
 SEVERITY_WEIGHTS = {

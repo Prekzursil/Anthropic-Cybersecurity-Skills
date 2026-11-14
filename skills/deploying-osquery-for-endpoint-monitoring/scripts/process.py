@@ -4,7 +4,6 @@
 import json
 import sys
 import os
-from collections import Counter, defaultdict
 from datetime import datetime
 
 

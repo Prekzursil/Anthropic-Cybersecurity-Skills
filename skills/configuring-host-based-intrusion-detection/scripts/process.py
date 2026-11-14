@@ -9,7 +9,6 @@ file integrity monitoring and intrusion detection events.
 import json
 import sys
 import os
-from collections import defaultdict, Counter
 from datetime import datetime
 
 
