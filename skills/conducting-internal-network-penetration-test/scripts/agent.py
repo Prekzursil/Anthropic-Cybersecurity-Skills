@@ -3,6 +3,10 @@
 # Usage against targets without prior mutual consent is illegal.
 # It is the end user's responsibility to obey all applicable local, state and federal laws.
 """Internal network penetration testing agent using nmap and impacket."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -87,7 +91,7 @@ def check_common_vulns(target):
             sock.connect((target, port))
             checks.append({"port": port, "service": service, "status": "open"})
         except (socket.timeout, ConnectionRefusedError, OSError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         finally:
             sock.close()
     return checks

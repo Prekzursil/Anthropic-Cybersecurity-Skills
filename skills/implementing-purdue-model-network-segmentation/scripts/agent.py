@@ -5,11 +5,13 @@ Audits OT/ICS network segmentation against the Purdue Enterprise
 Reference Architecture by testing connectivity between network zones,
 verifying firewall rules, and mapping discovered hosts to Purdue levels.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import json
-import os
 import socket
-import sys
 from datetime import datetime, timezone
 
 
@@ -122,7 +124,7 @@ def audit_ot_protocols(target_ips):
                         "detail": f"{protocol} on {ip}:{port} is accessible",
                     })
             except (socket.error, OSError):
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     print(f"[+] Found {len(findings)} exposed OT protocols")
     return findings

@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Privileged Account Access Review agent — audits privileged accounts for
 compliance with least-privilege and periodic recertification requirements."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import csv
@@ -87,7 +91,7 @@ def check_recertification(accounts: list[dict], cert_interval_days: int = 180) -
                                  "issue": "overdue_recertification", "severity": "high",
                                  "detail": f"Last certified {cert_date}, exceeds {cert_interval_days}-day cycle"})
         except ValueError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 

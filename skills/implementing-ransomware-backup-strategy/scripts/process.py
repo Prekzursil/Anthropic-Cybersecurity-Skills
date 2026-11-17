@@ -11,11 +11,13 @@ Audits backup infrastructure for ransomware resilience by checking:
 
 Supports Veeam, AWS Backup, and Azure Backup via API integration.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import subprocess
-import sys
-import os
 import socket
 import ssl
 import datetime
@@ -455,7 +457,7 @@ def check_veeam_api(server: str, port: int = 9419) -> dict:
             result["reachable"] = True
             sock.close()
         except (socket.timeout, ConnectionRefusedError, OSError):
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
     return result
 
 
@@ -475,7 +477,7 @@ def check_s3_object_lock(bucket_name: str) -> dict:
             result["retention_mode"] = rule.get("Mode")
             result["retention_days"] = rule.get("Days")
     except (subprocess.TimeoutExpired, FileNotFoundError, json.JSONDecodeError):
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
     return result
 
 

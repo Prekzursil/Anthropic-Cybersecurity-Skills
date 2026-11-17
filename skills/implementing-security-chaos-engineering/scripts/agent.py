@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for security chaos engineering experiments."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import os
 import json
@@ -81,7 +85,7 @@ def experiment_open_security_group(session, sg_id, check_interval=30, timeout=30
             )
             print(f"  [+] Rolled back SG {sg_id}")
         except ClientError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     exp = ChaosExperiment("open_security_group",
                           "Verify detection of unrestricted SSH access")
@@ -127,7 +131,7 @@ def experiment_create_admin_user(session, username="chaos-test-admin", timeout=3
             iam.delete_user(UserName=username)
             print(f"  [+] Rolled back user {username}")
         except ClientError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     exp = ChaosExperiment("create_admin_user",
                           "Verify detection of unauthorized admin user creation")
@@ -160,7 +164,7 @@ def experiment_stop_cloudtrail(session, trail_name, timeout=300):
             ct.start_logging(Name=trail_name)
             print(f"  [+] Restarted CloudTrail {trail_name}")
         except ClientError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     exp = ChaosExperiment("stop_cloudtrail",
                           "Verify detection of CloudTrail logging disabled")

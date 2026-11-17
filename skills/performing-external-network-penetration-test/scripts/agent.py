@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for performing external network penetration test reconnaissance and scanning."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -25,7 +29,7 @@ def tcp_port_scan(host, ports=None):
                 banner = ""
             results.append({"port": port, "state": "open", "banner": banner})
         except (socket.timeout, ConnectionRefusedError, OSError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         finally:
             sock.close()
     return {"host": host, "open_ports": results, "scanned": len(ports), "timestamp": datetime.utcnow().isoformat()}
@@ -79,7 +83,7 @@ def dns_enumeration(domain):
             answers = dns.resolver.resolve(domain, rtype)
             records[rtype] = [str(r) for r in answers]
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     subdomains = ["www", "mail", "ftp", "vpn", "remote", "api", "dev", "staging", "admin", "portal"]
     found_subs = []
     for sub in subdomains:
@@ -87,7 +91,7 @@ def dns_enumeration(domain):
             answers = dns.resolver.resolve(f"{sub}.{domain}", "A")
             found_subs.append({"subdomain": f"{sub}.{domain}", "ips": [str(r) for r in answers]})
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"domain": domain, "records": records, "subdomains": found_subs}
 
 

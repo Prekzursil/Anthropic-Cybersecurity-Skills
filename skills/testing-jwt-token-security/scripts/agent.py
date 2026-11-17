@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for testing JWT token security during authorized assessments."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import jwt
 import json
@@ -141,7 +145,7 @@ def test_expired_token(token, target_url):
             else:
                 print(f"  [+] Expired token rejected (status {resp.status_code})")
         except requests.RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     else:
         print("  [*] Token not expired, skipping test")
     return []
@@ -164,7 +168,7 @@ def test_token_after_logout(token, target_url, logout_url):
         else:
             print(f"  [+] Token properly revoked after logout")
     except requests.RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return []
 
 

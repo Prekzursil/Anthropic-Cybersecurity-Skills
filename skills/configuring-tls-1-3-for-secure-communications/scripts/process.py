@@ -15,12 +15,13 @@ Usage:
     python process.py check-ciphers --host example.com
 """
 
-import os
 import ssl
 import json
 import socket
 import argparse
 import logging
+
+_logger = logging.getLogger(__name__)
 import datetime
 from pathlib import Path
 
@@ -110,7 +111,7 @@ def test_tls_connection(host: str, port: int = 443, timeout: int = 10) -> Dict:
                         "bits": cipher[2],
                     }
     except (ssl.SSLError, Exception):
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     # Test deprecated protocols
     for version_name, version_enum in [
@@ -130,7 +131,7 @@ def test_tls_connection(host: str, port: int = 443, timeout: int = 10) -> Dict:
                     )
                     logger.warning(f"{version_name} is enabled on {host}:{port}")
         except (ssl.SSLError, OSError):
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     return results
 

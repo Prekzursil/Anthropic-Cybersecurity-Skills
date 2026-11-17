@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """CobaltStrike Malleable C2 Profile Analyzer - parses profiles to extract C2 indicators, detection signatures, and evasion techniques"""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 # For authorized security research and defensive analysis only
 
 import argparse
@@ -95,7 +99,7 @@ def analyze_profile(config):
                     "detail": f"Very low sleep time: {sleep_ms}ms - aggressive C2 callback rate",
                 })
         except ValueError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     uris = config.get("uris", [])
     for uri in uris:
         findings.append({

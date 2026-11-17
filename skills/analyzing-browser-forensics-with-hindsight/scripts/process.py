@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Browser Forensics Analyzer - Parses Chrome History SQLite for investigation."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import sqlite3, json, os, sys
 from datetime import datetime, timedelta
 
@@ -7,8 +11,10 @@ CHROME_EPOCH = datetime(1601, 1, 1)
 
 def chrome_ts(ts):
     if not ts: return None
-    try: return str(CHROME_EPOCH + timedelta(microseconds=ts))
-    except: return None
+    try:
+        return str(CHROME_EPOCH + timedelta(microseconds=ts))
+    except (OverflowError, ValueError):
+        return None
 
 def analyze_chrome(profile: str, output_dir: str) -> str:
     os.makedirs(output_dir, exist_ok=True)

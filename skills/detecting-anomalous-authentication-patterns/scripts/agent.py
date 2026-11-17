@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Authentication anomaly detection agent using UEBA analytics."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -176,7 +180,7 @@ def build_user_baseline(events, user):
             ts = datetime.fromisoformat(e["timestamp"].replace("Z", "+00:00"))
             hours.append(ts.hour)
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         ips[e.get("source_ip", "")] += 1
         countries[e.get("country", "")] += 1
         apps[e.get("app", "")] += 1

@@ -10,7 +10,6 @@ Usage:
 """
 
 import subprocess
-import os
 import argparse
 import datetime
 from pathlib import Path

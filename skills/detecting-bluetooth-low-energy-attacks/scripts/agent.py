@@ -8,6 +8,8 @@ import argparse
 import asyncio
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import subprocess
 import time
 from collections import defaultdict
@@ -130,7 +132,7 @@ async def enumerate_gatt_services(target_address, timeout=30.0):
                                                   f"{decoded[:50]}",
                                     })
                             except Exception:
-                                pass
+                                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
                         except Exception as e:
                             char_info["value"] = f"read_error: {e}"
 
@@ -217,7 +219,7 @@ async def test_replay_vulnerability(target_address, char_uuid, test_payload_hex,
                     initial_value = await client.read_gatt_char(char_uuid)
                     logger.info("Initial value: %s", initial_value.hex())
                 except Exception:
-                    pass
+                    _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
             # Write the captured/test payload
             try:
@@ -427,7 +429,7 @@ def analyze_pcap_for_ble_attacks(pcap_path):
                               "pairing or denial-of-service attack.",
                 })
     except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     # Attempt crackle analysis
     try:

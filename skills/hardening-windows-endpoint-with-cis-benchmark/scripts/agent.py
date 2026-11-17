@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for auditing Windows endpoints against CIS Benchmark hardening controls."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -73,7 +77,7 @@ def check_windows_firewall():
             if not data.get("Enabled"):
                 findings.append({"check": "9.1", "issue": f"Firewall {profile} profile disabled", "severity": "HIGH"})
         except json.JSONDecodeError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 
@@ -111,7 +115,7 @@ def check_windows_features():
             if data.get("State") == 1:  # Enabled
                 findings.append({"check": "18.x", "issue": f"Risky feature enabled: {feature}", "severity": "MEDIUM"})
         except json.JSONDecodeError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 

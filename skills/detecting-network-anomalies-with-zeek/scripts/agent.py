@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Zeek network anomaly detection agent for log analysis and threat hunting."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import os
@@ -32,7 +36,7 @@ def check_zeek_status():
         r = subprocess.run(["zeekctl", "status"], capture_output=True, text=True, timeout=10)
         running = "running" in r.stdout.lower()
     except FileNotFoundError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return {**version, "running": running}
 
@@ -82,7 +86,7 @@ def parse_conn_log(log_path=None):
                     if dur > 3600:
                         long_connections.append({"src": src, "dst": dst, "duration_sec": dur, "service": service})
                 except ValueError:
-                    pass
+                    _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return {
         "total_connections": total,
@@ -208,7 +212,7 @@ def detect_beaconing(log_path=None, interval_tolerance=0.15):
             try:
                 pair_times[f"{src}->{dst}"].append(float(ts))
             except ValueError:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     beacons = []
     for pair, times in pair_times.items():

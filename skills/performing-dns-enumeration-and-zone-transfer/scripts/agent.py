@@ -6,6 +6,10 @@ attempts, and subdomain discovery using dnspython.
 
 WARNING: Only use with explicit written authorization for the target domain.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -108,7 +112,7 @@ def check_email_security(domain: str) -> dict:
             if txt_str.startswith("v=spf1"):
                 security["spf"] = txt_str
     except dns.exception.DNSException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     try:
         dmarc = dns.resolver.resolve(f"_dmarc.{domain}", "TXT")
@@ -117,7 +121,7 @@ def check_email_security(domain: str) -> dict:
             if "v=DMARC1" in txt_str:
                 security["dmarc"] = txt_str
     except dns.exception.DNSException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     common_selectors = ["default", "google", "selector1", "selector2", "s1", "s2", "mail", "k1"]
     for selector in common_selectors:
@@ -129,7 +133,7 @@ def check_email_security(domain: str) -> dict:
                     "record": str(txt).strip('"')[:100],
                 })
         except dns.exception.DNSException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return security
 
@@ -157,14 +161,14 @@ def brute_force_subdomains(domain: str, wordlist: list[str] = None) -> list[dict
             ips = [str(a) for a in answers]
             found.append({"subdomain": fqdn, "ips": ips, "record_type": "A"})
         except dns.exception.DNSException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         try:
             answers = resolver.resolve(fqdn, "CNAME")
             cnames = [str(c) for c in answers]
             found.append({"subdomain": fqdn, "cnames": cnames, "record_type": "CNAME"})
         except dns.exception.DNSException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return found
 

@@ -5,6 +5,10 @@ Manages Wazuh agents, queries alerts, tests custom decoder/rule
 logic via logtest, and audits endpoint coverage using the
 Wazuh REST API.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -43,7 +47,7 @@ class WazuhDetectionAgent:
             if resp.status_code == 200:
                 return resp.json().get("data", {}).get("token")
         except requests.RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         return None
 
     def _api(self, method, path, params=None, data=None):

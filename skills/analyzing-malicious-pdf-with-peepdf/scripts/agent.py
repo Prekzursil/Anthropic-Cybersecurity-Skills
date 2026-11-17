@@ -4,6 +4,8 @@
 import json
 import argparse
 import logging
+
+_logger = logging.getLogger(__name__)
 import subprocess
 import hashlib
 import os
@@ -51,7 +53,7 @@ def run_pdfid(filepath):
                         count = int(parts[1])
                         keywords[kw] = count
                     except ValueError:
-                        pass
+                        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return keywords
 
 

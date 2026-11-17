@@ -3,6 +3,10 @@
 # Usage against targets without prior mutual consent is illegal.
 # It is the end user's responsibility to obey all applicable local, state and federal laws.
 """Agent for performing open source intelligence (OSINT) gathering."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -49,7 +53,7 @@ def dns_enumeration(domain):
             answers = dns.resolver.resolve(domain, rtype)
             records[rtype] = [str(r) for r in answers]
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     subs = ["www", "mail", "ftp", "vpn", "api", "dev", "staging", "admin",
             "portal", "test", "owa", "remote", "webmail", "autodiscover", "sip"]
     found = []
@@ -58,7 +62,7 @@ def dns_enumeration(domain):
             answers = dns.resolver.resolve(f"{sub}.{domain}", "A")
             found.append({"subdomain": f"{sub}.{domain}", "ips": [str(r) for r in answers]})
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"domain": domain, "records": records, "subdomains": found}
 
 
@@ -74,7 +78,7 @@ def email_harvest(domain):
             for email in data.get("data", {}).get("emails", []):
                 emails.add(email.get("value", ""))
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     pattern = re.compile(rf"[a-zA-Z0-9._%+-]+@{re.escape(domain)}", re.I)
     search_urls = [f"https://www.google.com/search?q=%22%40{domain}%22&num=20"]
     return {

@@ -6,6 +6,10 @@ theHarvester, SpiderFoot, breach databases), performs cross-source
 entity resolution and correlation, and generates unified intelligence
 profiles with confidence scoring.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import csv
@@ -184,7 +188,7 @@ def normalize_all_sources(source_files):
                 elif isinstance(data, dict) and "findings" in data:
                     all_findings.extend(data["findings"])
             except (json.JSONDecodeError, ValueError):
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return all_findings
 

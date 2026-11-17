@@ -2,6 +2,10 @@
 """GCP penetration testing agent: bucket enumeration, IAM audit, privilege escalation analysis.
 # For authorized testing only
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import subprocess
@@ -73,7 +77,7 @@ def test_bucket_permissions(bucket_name):
                         "severity": "critical",
                     })
         except json.JSONDecodeError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"bucket": bucket_name, "public_bindings": granted}
 
 

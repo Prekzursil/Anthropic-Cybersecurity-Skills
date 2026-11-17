@@ -6,6 +6,10 @@ Audits backup infrastructure for ransomware resilience by checking
 backup encryption status, recovery point objectives (RPO), and
 backup integrity verification schedules.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import json
 import os
@@ -108,7 +112,7 @@ def check_restic_repository(repo_path, password_file=None):
                                         "severity": "MEDIUM",
                                         "detail": f"Latest backup is {age_hours:.0f}h old (>24h)"})
                 except (ValueError, TypeError):
-                    pass
+                    _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         else:
             findings.append({"check": "Repository access", "status": "FAIL",
                              "severity": "CRITICAL", "detail": result.stderr[:200]})

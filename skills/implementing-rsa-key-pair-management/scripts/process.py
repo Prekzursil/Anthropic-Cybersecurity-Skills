@@ -16,7 +16,6 @@ Usage:
     python process.py rotate --keystore ./keys --passphrase "MyKeyPass"
 """
 
-import os
 import sys
 import json
 import hashlib

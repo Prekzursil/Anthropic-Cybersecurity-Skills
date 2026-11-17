@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """WiFi password cracking assessment agent using aircrack-ng subprocess wrappers."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import subprocess
 import sys
@@ -135,7 +139,7 @@ def try_pmkid_capture(mon_iface, bssid, channel, timeout=30):
         if os.path.exists(hash_file) and os.path.getsize(hash_file) > 0:
             return {"pmkid_captured": True, "hash_file": hash_file}
     except FileNotFoundError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"pmkid_captured": False}
 
 
@@ -169,7 +173,7 @@ def crack_with_hashcat(hash_file, wordlist="/usr/share/wordlists/rockyou.txt",
             with open(cracked_file) as f:
                 return {"cracked": True, "result": f.read().strip(), "tool": "hashcat"}
     except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"cracked": False, "tool": "hashcat"}
 
 

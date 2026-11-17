@@ -16,15 +16,12 @@ References:
     - APT29a Blog: Deploying Honeytokens in AD
 """
 
-import os
 import json
 import uuid
 import base64
 import argparse
 import secrets
-import string
 from pathlib import Path
-from typing import Any
 
 # ---------------------------------------------------------------------------
 # Constants

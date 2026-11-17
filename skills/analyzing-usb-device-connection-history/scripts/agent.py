@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for analyzing USB device connection history from Windows registry hives."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import os
 import json
@@ -60,7 +64,7 @@ def parse_mounted_devices(system_hive_path):
                             "device_path": device_path,
                         })
                 except (UnicodeDecodeError, ValueError):
-                    pass
+                    _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return mappings
 
 

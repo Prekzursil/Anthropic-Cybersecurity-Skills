@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """C2 communication analysis agent for beacon detection and protocol decoding."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import statistics
 import base64
@@ -94,7 +98,7 @@ def extract_http_requests(pcap_path):
                         "decoded_body_preview": decoded_body,
                     })
                 except (dpkt.dpkt.NeedData, dpkt.dpkt.UnpackError):
-                    pass
+                    _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
             except Exception:
                 continue
     return requests

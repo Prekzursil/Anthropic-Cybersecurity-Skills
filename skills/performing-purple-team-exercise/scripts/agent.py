@@ -5,6 +5,10 @@ Coordinates red team technique execution with blue team detection
 validation, tracks ATT&CK-mapped test results, and generates
 detection coverage reports.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -83,7 +87,7 @@ class PurpleTeamAgent:
                         t2 = datetime.fromisoformat(detection_time)
                         latency = (t2 - t1).total_seconds()
                     except ValueError:
-                        pass
+                        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
                 result = {
                     "attack_id": attack_id,

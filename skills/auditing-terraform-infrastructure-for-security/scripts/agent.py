@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for auditing Terraform infrastructure for security misconfigurations."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -105,7 +109,7 @@ def scan_tf_plan_for_issues(plan_json_path):
                         if stmt.get("Action") == "*" and stmt.get("Effect") == "Allow":
                             issues.append({"resource": address, "issue": "IAM wildcard actions", "severity": "CRITICAL"})
                 except json.JSONDecodeError:
-                    pass
+                    _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return issues
 
 

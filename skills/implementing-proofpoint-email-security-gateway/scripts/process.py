@@ -11,6 +11,10 @@ Usage:
     python process.py check-auth --domain example.com
     python process.py validate-headers --eml-file message.eml
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -178,7 +182,7 @@ def check_authentication(domain: str) -> AuthCheckResult:
             result.dkim_selector = "proofpoint"
             break
     except Exception:
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     return result
 

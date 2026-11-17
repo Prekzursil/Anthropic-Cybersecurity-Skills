@@ -16,12 +16,13 @@ Usage:
     python process.py verify-chain --cert ./server.crt --ca-bundle ./ca-bundle.crt
 """
 
-import os
 import ssl
 import json
 import socket
 import argparse
 import logging
+
+_logger = logging.getLogger(__name__)
 import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -123,7 +124,7 @@ def parse_certificate(cert_path: str) -> Dict:
         san_ext = cert.extensions.get_extension_for_oid(ExtensionOID.SUBJECT_ALTERNATIVE_NAME)
         san_names = [name.value for name in san_ext.value.get_values_for_type(x509.DNSName)]
     except x509.ExtensionNotFound:
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     now = datetime.datetime.utcnow()
     not_after = cert.not_valid_after_utc.replace(tzinfo=None)

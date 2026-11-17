@@ -3,6 +3,10 @@
 Cosign Image Provenance Manager - Sign, verify, and audit container
 image signatures using Sigstore Cosign.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import subprocess
@@ -63,7 +67,7 @@ def verify_image(image: str, key: str = None, identity: str = None,
         try:
             signatures = json.loads(result["stdout"])
         except json.JSONDecodeError:
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     return {
         "image": image,

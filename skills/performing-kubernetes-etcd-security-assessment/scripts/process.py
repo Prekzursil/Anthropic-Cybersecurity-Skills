@@ -5,12 +5,15 @@ Kubernetes etcd Security Assessment Tool
 Checks etcd security configuration including TLS, encryption at rest,
 access controls, certificate expiration, and backup status.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import subprocess
 import sys
 import argparse
-from pathlib import Path
 
 
 def run_command(cmd: list[str], timeout: int = 15) -> tuple[str, str, int]:
@@ -138,7 +141,7 @@ def check_etcd_pod_security() -> list[dict]:
                         "description": f"etcd mounts PKI directory: {host_mounts[0]['mountPath']}"
                     })
     except (json.JSONDecodeError, KeyError):
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     return findings
 

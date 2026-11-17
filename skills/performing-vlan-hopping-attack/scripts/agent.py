@@ -3,6 +3,10 @@
 # Usage against targets without prior mutual consent is illegal.
 # It is the end user's responsibility to obey all applicable local, state and federal laws.
 """VLAN hopping assessment agent using scapy for DTP and double-tagging tests."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import subprocess
 import sys
@@ -35,7 +39,7 @@ def check_vlan_config(iface="eth0"):
         with open("/proc/net/vlan/config", "r") as f:
             vlan_config = f.read()
     except FileNotFoundError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"vlan_config": vlan_config}
 
 

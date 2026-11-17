@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for detecting ransomware precursor activity in network traffic and logs."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -80,7 +84,7 @@ def analyze_event_logs_windows():
                 data = json.loads(result) if result.strip().startswith(("[", "{")) else result
                 alerts.append({"check": name, "findings": data})
         except (subprocess.SubprocessError, json.JSONDecodeError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return alerts
 
 
@@ -101,7 +105,7 @@ def scan_process_list():
                         if pname == sp.lower():
                             suspicious.append({"process": pname, "pid": parts[1] if len(parts) > 1 else "?"})
         except subprocess.SubprocessError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     else:
         try:
             out = subprocess.check_output(["ps", "-eo", "pid,comm", "--no-headers"], text=True, timeout=120)
@@ -112,7 +116,7 @@ def scan_process_list():
                         if parts[1].strip().lower() == sp.replace(".exe", ""):
                             suspicious.append({"process": parts[1].strip(), "pid": parts[0]})
         except subprocess.SubprocessError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return suspicious
 
 
@@ -133,7 +137,7 @@ def check_file_encryption_activity(directory, threshold=50):
             if count >= threshold:
                 break
     except PermissionError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"encrypted_file_count": count, "samples": findings, "threshold_exceeded": count >= threshold}
 
 

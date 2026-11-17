@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for analyzing Windows LNK shortcut files for forensic artifacts."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import os
 import json
@@ -111,7 +115,7 @@ def detect_suspicious_startup(startup_dir):
                 parsed["risk"] = "HIGH"
                 suspicious.append(parsed)
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return suspicious
 
 

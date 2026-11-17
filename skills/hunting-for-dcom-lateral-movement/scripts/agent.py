@@ -3,6 +3,8 @@
 
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import argparse
 import os
 import sys
@@ -266,7 +268,7 @@ def audit_dcom_config():
         audit_results.append({"check": "DCOM Enabled", "value": dcom_enabled,
                               "risk": "HIGH" if dcom_enabled == "Y" else "LOW"})
     except (subprocess.TimeoutExpired, Exception):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return audit_results
 

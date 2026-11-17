@@ -4,7 +4,6 @@
 import subprocess
 import json
 import sys
-import re
 
 def run_docker_bench():
     """Run Docker Bench Security and parse results."""

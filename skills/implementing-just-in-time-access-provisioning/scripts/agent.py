@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for implementing and auditing Just-In-Time access provisioning."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -79,7 +83,7 @@ def audit_standing_privileges(privileges_path):
                 usage_dt = datetime.fromisoformat(usage.replace("Z", ""))
                 days_unused = (datetime.utcnow() - usage_dt).days
             except ValueError:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         if is_privileged and days_unused > 30:
             candidates.append({
@@ -130,7 +134,7 @@ def calculate_jit_metrics(requests_path):
                 a_dt = datetime.fromisoformat(approved.replace("Z", ""))
                 approval_times.append((a_dt - r_dt).total_seconds() / 60)
             except ValueError:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         duration = req.get("duration_hours", 0)
         if duration:

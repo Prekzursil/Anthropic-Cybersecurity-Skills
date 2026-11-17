@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """ICS/SCADA anomaly detection agent for industrial control systems."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -104,7 +108,7 @@ def check_ics_network_segmentation(host, ics_ports=None):
                 result["severity"] = "CRITICAL"
             results.append(result)
         except socket.error:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return results
 
 

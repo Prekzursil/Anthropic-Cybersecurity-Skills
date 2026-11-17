@@ -15,11 +15,12 @@ Usage:
     python process.py test-samples  # Run against built-in test samples
 """
 
-import os
 import re
 import json
 import argparse
 import logging
+
+_logger = logging.getLogger(__name__)
 from pathlib import Path
 from typing import Dict, List, Optional
 from dataclasses import dataclass, asdict
@@ -177,7 +178,7 @@ def scan_file(file_path: str) -> List[Finding]:
                             cwe_id=cwe,
                         ))
                 except (ValueError, IndexError):
-                    pass
+                    _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
         # Insecure random
         for pattern, desc, cwe in INSECURE_RANDOM_PATTERNS:

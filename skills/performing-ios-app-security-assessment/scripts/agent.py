@@ -6,13 +6,14 @@ SSL pinning bypass, keychain extraction, IPA static analysis, and runtime method
 import argparse
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import os
 import plistlib
 import re
 import subprocess
 import zipfile
 from datetime import datetime
-from pathlib import Path
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -329,7 +330,7 @@ def analyze_ipa_static(ipa_path, output_dir):
                     raw = f.read()
                 binary_strings = raw.decode("ascii", errors="ignore")
             except Exception:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         for pattern, label in secret_patterns:
             matches = re.findall(pattern, binary_strings)
@@ -363,7 +364,7 @@ def analyze_ipa_static(ipa_path, output_dir):
                     "mastg": "MASTG-TEST-0083",
                 })
         except (subprocess.SubprocessError, FileNotFoundError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     # Check for unprotected frameworks
     frameworks_dir = os.path.join(app_path, "Frameworks")

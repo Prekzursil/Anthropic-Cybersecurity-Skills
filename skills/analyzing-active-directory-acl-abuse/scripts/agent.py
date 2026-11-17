@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Active Directory ACL abuse detection using ldap3 to find dangerous permissions."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -141,7 +145,7 @@ def resolve_sid(conn: Connection, base_dn: str, sid: str) -> str:
             entry = conn.entries[0]
             return str(entry.sAMAccountName) if hasattr(entry, "sAMAccountName") else str(entry.cn)
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return sid
 
 

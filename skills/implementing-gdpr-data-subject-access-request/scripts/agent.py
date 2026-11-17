@@ -12,7 +12,6 @@ References:
     - EDPB Guidelines 01/2022 on Right of Access
 """
 
-import os
 import re
 import json
 import uuid

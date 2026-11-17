@@ -6,6 +6,10 @@ for provisioned applications, user assignments, group memberships, and
 deprovisioning status. Identifies orphaned accounts, mismatched
 assignments, and provisioning failures.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import json
 import os
@@ -151,7 +155,7 @@ def check_deprovisioning(org_url, token):
                     "apps": [a.get("appName", "") for a in apps[:5]],
                 })
         except requests.RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     if not findings:
         findings.append({

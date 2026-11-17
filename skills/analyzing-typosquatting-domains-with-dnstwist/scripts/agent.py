@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """Typosquatting domain detection agent using dnstwist concepts."""
+import logging
 
-import os, sys, json, socket
+_logger = logging.getLogger(__name__)
+
+
+import sys, json, socket
 
 try:
     import dnstwist as dnstwist_lib
@@ -64,7 +68,7 @@ def run_dnstwist_cli(domain):
         if result.returncode == 0:
             return json.loads(result.stdout)
     except (FileNotFoundError, subprocess.TimeoutExpired, json.JSONDecodeError):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return None
 
 if __name__ == '__main__':

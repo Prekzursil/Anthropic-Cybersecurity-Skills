@@ -9,7 +9,6 @@ identify unmanaged endpoints, and generate deployment status reports.
 import json
 import sys
 import os
-import time
 import csv
 from datetime import datetime, timedelta
 from urllib.request import Request, urlopen

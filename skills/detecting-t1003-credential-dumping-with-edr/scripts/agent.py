@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for detecting T1003 credential dumping via EDR telemetry analysis."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -67,7 +71,7 @@ def check_lsass_access_sysmon():
                     "suspicious": True,
                 })
     except (subprocess.SubprocessError, json.JSONDecodeError):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 
@@ -106,7 +110,7 @@ def check_credential_dump_processes():
                     })
                     break
     except (subprocess.SubprocessError, json.JSONDecodeError):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 
@@ -147,7 +151,7 @@ def check_sam_ntds_access():
                         "pattern": pat,
                     })
     except (subprocess.SubprocessError, json.JSONDecodeError):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 

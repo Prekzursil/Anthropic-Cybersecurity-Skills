@@ -6,7 +6,6 @@ Tracks physical intrusion testing attempts, documents findings,
 and generates assessment reports with remediation recommendations.
 """
 
-import os
 from datetime import datetime
 from collections import defaultdict
 

@@ -4,6 +4,10 @@
 Orchestrates multi-source IOC lookups across VirusTotal, AbuseIPDB,
 Shodan, and GreyNoise to provide contextual scoring and disposition.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import requests
 import json
@@ -74,7 +78,7 @@ class IOCEnrichmentAgent:
                     "isp": data.get("isp", "Unknown"),
                 }
             except requests.RequestException:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         if self.shodan_key:
             try:
@@ -91,7 +95,7 @@ class IOCEnrichmentAgent:
                         "vulns": host.get("vulns", []),
                     }
             except requests.RequestException:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         if self.greynoise_key:
             try:
@@ -107,7 +111,7 @@ class IOCEnrichmentAgent:
                     "name": gn.get("name", "Unknown"),
                 }
             except requests.RequestException:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         result.risk_score = self._score_ip(result)
         result.disposition = self._disposition(result.risk_score)

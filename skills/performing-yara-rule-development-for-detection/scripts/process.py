@@ -13,6 +13,10 @@ Usage:
     python process.py --test rule.yar --samples ./malware --clean ./goodware
     python process.py --generate --name MalwareX --strings strings.txt
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -96,7 +100,7 @@ class YaraRuleBuilder:
                                     imp.name.decode('utf-8', errors='replace')
                                 )
             except Exception:
-                pass
+                _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
         return {
             "total_ascii": len(ascii_strings),
@@ -189,7 +193,7 @@ class YaraRuleBuilder:
                             {"file": str(f), "result": "FALSE_NEGATIVE"}
                         )
                 except Exception:
-                    pass
+                    _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
         # Scan clean files
         if clean_dir:
@@ -205,7 +209,7 @@ class YaraRuleBuilder:
                         else:
                             results["true_negatives"] += 1
                     except Exception:
-                        pass
+                        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
         results["scan_time"] = time.perf_counter() - start
 

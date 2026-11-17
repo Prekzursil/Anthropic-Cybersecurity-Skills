@@ -7,7 +7,6 @@ S3 bucket access restriction, and forensic snapshot creation using boto3.
 """
 import argparse
 import json
-import os
 import sys
 from datetime import datetime, timezone
 

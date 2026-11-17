@@ -6,6 +6,10 @@ cryptography library. Supports key generation with configurable sizes,
 PEM export with encryption, public key extraction, key strength
 auditing, and expiration tracking.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import json
 import os
@@ -141,7 +145,7 @@ def scan_directory_for_keys(directory, recursive=True):
                     if any(marker in header for marker in key_markers):
                         is_key = True
                 except (IOError, PermissionError):
-                    pass
+                    _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
             if is_key:
                 findings = audit_key_file(full_path)
                 key_files.append({"path": full_path, "findings": findings})

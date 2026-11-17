@@ -4,6 +4,8 @@
 import json
 import argparse
 import logging
+
+_logger = logging.getLogger(__name__)
 import subprocess
 import xml.etree.ElementTree as ET
 from datetime import datetime
@@ -74,7 +76,7 @@ def check_system_health(fw_ip, api_key):
         info["threat_version"] = root.findtext(".//threat-version", "")
         info["app_version"] = root.findtext(".//app-version", "")
     except ET.ParseError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return info
 
 

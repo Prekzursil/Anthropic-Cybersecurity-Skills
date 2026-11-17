@@ -17,7 +17,6 @@ except ImportError:
 
 def audit_aws_security_groups(session):
     """Audit AWS security groups for microsegmentation compliance."""
-    import boto3
     ec2 = session.client("ec2")
     findings = []
     for sg in ec2.describe_security_groups()["SecurityGroups"]:

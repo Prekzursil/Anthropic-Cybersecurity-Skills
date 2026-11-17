@@ -10,6 +10,10 @@ Usage:
     python process.py --parse-report dmarc_report.xml
     python process.py --parse-report-dir /path/to/reports/
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -17,8 +21,6 @@ import sys
 import xml.etree.ElementTree as ET
 import gzip
 import zipfile
-import io
-import os
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -141,7 +143,7 @@ def query_dns_txt(domain: str) -> list:
                     results.append(txt)
                 return results
         except Exception:
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
     return []
 
 
@@ -250,7 +252,7 @@ def check_dkim(domain: str, selectors: list = None) -> list:
                     key_bytes = base64.b64decode(record.public_key)
                     record.key_length = len(key_bytes) * 8
                 except Exception:
-                    pass
+                    _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
             if record.key_length and record.key_length < 2048:
                 record.errors.append(

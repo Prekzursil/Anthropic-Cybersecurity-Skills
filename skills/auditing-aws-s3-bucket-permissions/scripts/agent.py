@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for auditing AWS S3 bucket permissions using boto3."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import os
 import json
@@ -98,7 +102,7 @@ def check_encryption(session, bucket_name):
             algo = rules[0].get("ApplyServerSideEncryptionByDefault", {}).get("SSEAlgorithm")
             return {"enabled": True, "algorithm": algo}
     except ClientError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"enabled": False, "algorithm": None}
 
 

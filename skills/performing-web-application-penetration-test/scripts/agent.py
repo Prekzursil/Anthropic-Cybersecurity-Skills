@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Web application penetration test agent using requests and subprocess."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import subprocess
 import sys
@@ -76,13 +80,13 @@ def test_http_methods(target_url):
                     "risk": "HIGH" if method in ("PUT", "DELETE") else "MEDIUM",
                 })
         except RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     try:
         resp = requests.options(target_url, timeout=5, verify=False)
         allow = resp.headers.get("Allow", "")
         results.append({"method": "OPTIONS", "allow_header": allow})
     except RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return results
 
 
@@ -109,7 +113,7 @@ def test_cors_config(target_url):
                     "risk": "HIGH" if acac.lower() == "true" else "MEDIUM",
                 })
         except RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return tests
 
 
@@ -159,7 +163,7 @@ def test_sql_injection_basic(target_url, params):
                         })
                         break
             except RequestException:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 
@@ -184,7 +188,7 @@ def test_xss_basic(target_url, params):
                         "reflected": True, "risk": "HIGH",
                     })
             except RequestException:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 

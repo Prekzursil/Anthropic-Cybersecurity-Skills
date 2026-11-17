@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Detect data staging activity before exfiltration via archive creation and file consolidation monitoring."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import re
@@ -98,7 +102,7 @@ def _estimate_archive_size(event):
         try:
             return int(size_str)
         except ValueError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return None
 
 

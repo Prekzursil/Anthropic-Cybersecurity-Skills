@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Historian server attack detection agent for ICS/SCADA environments."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import os
@@ -41,7 +45,7 @@ def scan_historian_ports(host):
                 result["severity"] = "HIGH"
             results.append(result)
         except socket.error:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return results
 
 
@@ -83,7 +87,7 @@ def check_pi_web_api(host, username=None, password=None):
                     "severity": "CRITICAL",
                 })
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return results
 

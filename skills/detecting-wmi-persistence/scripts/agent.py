@@ -4,6 +4,8 @@
 import json
 import argparse
 import logging
+
+_logger = logging.getLogger(__name__)
 import subprocess
 import re
 import xml.etree.ElementTree as ET
@@ -83,7 +85,7 @@ def enumerate_wmi_subscriptions():
                     data = [data]
                 subscriptions[category] = data
             except json.JSONDecodeError:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return subscriptions
 
 

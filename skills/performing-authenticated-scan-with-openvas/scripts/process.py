@@ -8,7 +8,6 @@ the Greenbone Management Protocol (GMP) via python-gvm.
 import argparse
 import csv
 import sys
-import xml.etree.ElementTree as ET
 
 try:
     from gvm.connections import UnixSocketConnection

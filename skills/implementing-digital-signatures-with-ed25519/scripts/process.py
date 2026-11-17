@@ -16,12 +16,13 @@ Usage:
     python process.py benchmark
 """
 
-import sys
 import json
 import time
 import hashlib
 import argparse
 import logging
+
+_logger = logging.getLogger(__name__)
 import datetime
 import base64
 from pathlib import Path
@@ -154,7 +155,7 @@ def verify_file(key_path: str, input_path: str, sig_path: str) -> Dict:
         try:
             signature = base64.b64decode(signature)
         except Exception:
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     valid = verify_data(data, signature, public_key)
     logger.info(f"Verification: {'VALID' if valid else 'INVALID'}")

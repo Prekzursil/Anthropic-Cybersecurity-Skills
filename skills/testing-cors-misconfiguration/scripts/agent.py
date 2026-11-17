@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for testing CORS misconfiguration vulnerabilities during authorized assessments."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import os
 import requests
@@ -104,7 +108,7 @@ def test_wildcard_with_credentials(url):
         elif acao == "*":
             print(f"  [+] Wildcard (*) without credentials (acceptable for public APIs)")
     except requests.RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return []
 
 
@@ -125,7 +129,7 @@ def test_null_origin(url, cookies=None):
         else:
             print(f"  [+] Null origin not reflected")
     except requests.RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return []
 
 

@@ -4,13 +4,16 @@ C2 Beaconing Detection Script
 Analyzes network connection logs for periodic beaconing patterns
 using statistical frequency analysis and jitter detection.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import csv
 import argparse
 import datetime
 import math
-import re
 from collections import defaultdict
 from pathlib import Path
 
@@ -210,7 +213,7 @@ def detect_beaconing(connections: list[dict]) -> list[dict]:
                     risk += 10
                     indicators.append(f"Suspicious port: {port}")
             except ValueError:
-                pass
+                _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
         # High connection count
         if len(conns) > 500:

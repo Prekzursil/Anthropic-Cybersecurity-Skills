@@ -3,6 +3,10 @@
 # Usage against targets without prior mutual consent is illegal.
 # It is the end user's responsibility to obey all applicable local, state and federal laws.
 """Agent for performing HTTP parameter pollution (HPP) attack testing."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -64,7 +68,7 @@ def test_hpp_payloads(url, method="GET", headers=None):
         baseline_resp = requests.get(url, headers=hdrs, timeout=10)
         baseline = {"status": baseline_resp.status_code, "length": len(baseline_resp.text)}
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     for category, payloads in HPP_PAYLOADS.items():
         for payload in payloads:
             try:

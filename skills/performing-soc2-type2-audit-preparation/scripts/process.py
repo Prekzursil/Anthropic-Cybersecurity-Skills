@@ -8,7 +8,6 @@ readiness assessment, and audit preparation for SOC 2 Type II examinations.
 
 import json
 import csv
-import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from dataclasses import dataclass, field, asdict

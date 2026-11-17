@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Sysmon scheduled task detection agent for hunting malicious persistence."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -93,7 +97,7 @@ def detect_schtasks_creation(events):
                     decoded = base64.b64decode(encoded.group(1)).decode("utf-16-le", errors="replace")
                     reasons.append(f"Decoded command: {decoded[:150]}")
                 except Exception:
-                    pass
+                    _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         if not reasons:
             reasons.append("Scheduled task creation detected")

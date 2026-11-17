@@ -12,7 +12,6 @@ Evaluates exercise results and generates after-action reports.
 """
 
 import json
-import sys
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 

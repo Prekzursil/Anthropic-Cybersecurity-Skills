@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for performing endpoint forensics investigation on Windows systems."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -99,7 +103,7 @@ def collect_autoruns():
         result = subprocess.run(["schtasks", "/query", "/fo", "CSV"], capture_output=True, text=True, timeout=30)
         autoruns["scheduled_tasks_count"] = result.stdout.count("\n") - 1
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return autoruns
 
 

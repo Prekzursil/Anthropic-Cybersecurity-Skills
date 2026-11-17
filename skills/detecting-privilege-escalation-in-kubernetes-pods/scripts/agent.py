@@ -4,6 +4,10 @@
 Audits pod security contexts, capabilities, and service account permissions
 to detect misconfigurations enabling container privilege escalation.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -27,7 +31,7 @@ def get_pods(namespace="--all-namespaces"):
         if result.returncode == 0:
             return json.loads(result.stdout).get("items", [])
     except (subprocess.TimeoutExpired, FileNotFoundError, json.JSONDecodeError):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return []
 
 

@@ -12,7 +12,6 @@ Usage:
 import subprocess
 import json
 import os
-import sys
 import argparse
 import datetime
 from pathlib import Path

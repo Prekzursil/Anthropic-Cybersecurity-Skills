@@ -6,9 +6,12 @@ logs for suspicious domain registrations, performing DNS lookups for
 typosquatting domains, and scanning social media profile names. Uses
 crt.sh API and DNS resolution to identify potential phishing domains.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import json
-import os
 import socket
 import sys
 from datetime import datetime, timezone
@@ -79,7 +82,7 @@ def check_domain_resolution(domains, max_check=200):
                 "severity": "HIGH",
             })
         except socket.gaierror:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     print(f"[+] Checked {checked} domains, {len(resolved)} resolve to an IP")
     return resolved
 

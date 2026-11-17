@@ -10,7 +10,6 @@ import subprocess
 import json
 import sys
 import os
-import re
 from dataclasses import dataclass, field
 
 

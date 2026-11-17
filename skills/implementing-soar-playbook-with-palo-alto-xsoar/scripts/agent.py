@@ -6,6 +6,10 @@ security playbooks, automation scripts, incidents, and integrations.
 Supports listing playbooks, checking incident statistics, and
 verifying integration health.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import json
 import os
@@ -79,7 +83,7 @@ def get_incident_stats(server, api_key, days=30):
         for bucket in agg_result.get("aggregations", {}).get("status", {}).get("buckets", []):
             statuses[bucket.get("key", "unknown")] = bucket.get("doc_count", 0)
     except (requests.RequestException, KeyError):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return {"total": total, "period_days": days, "by_status": statuses}
 

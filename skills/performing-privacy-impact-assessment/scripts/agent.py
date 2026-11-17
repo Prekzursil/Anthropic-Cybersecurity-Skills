@@ -6,7 +6,6 @@ for systematic identification and mitigation of privacy risks. Supports
 GDPR Article 35 and CCPA/CPRA compliance checks with risk scoring matrices.
 """
 
-import os
 import json
 import uuid
 import argparse

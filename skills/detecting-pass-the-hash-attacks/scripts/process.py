@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Pass-the-Hash Detection - Analyzes authentication logs for NTLM-based lateral movement patterns."""
 
-import json, csv, argparse, datetime, re
+import json, csv, argparse, datetime
 from collections import defaultdict
 from pathlib import Path
 

@@ -5,10 +5,11 @@
 import argparse
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import os
 import re
 import shutil
-import subprocess
 import sys
 import tempfile
 import zipfile
@@ -123,7 +124,7 @@ def enumerate_functions(lambda_client):
                 func_info["has_function_url"] = True
                 func_info["function_url_auth"] = url_config.get("AuthType", "UNKNOWN")
             except ClientError:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
             functions.append(func_info)
 

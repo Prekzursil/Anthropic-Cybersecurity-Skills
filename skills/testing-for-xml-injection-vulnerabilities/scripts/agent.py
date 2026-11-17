@@ -5,6 +5,10 @@ Tests web applications for XXE (XML External Entity), XPath
 injection, and XML entity expansion attacks that enable file
 disclosure, SSRF, and denial of service.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -166,7 +170,7 @@ class XMLInjectionTestAgent:
                 })
                 return {"vulnerable": True}
         except requests.RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         return {"vulnerable": False}
 
     def generate_report(self, endpoints=None):

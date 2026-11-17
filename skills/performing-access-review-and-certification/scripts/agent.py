@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for conducting access review and certification using identity governance APIs."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -77,7 +81,7 @@ def check_last_used(records, stale_days=90):
                     stale.append({"user": r.get("username"), "entitlement": r.get("entitlement"),
                                   "last_used": last_used, "severity": "MEDIUM"})
             except ValueError:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     print(f"\n[*] Stale entitlements (>{stale_days} days unused): {len(stale)}")
     return stale
 

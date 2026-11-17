@@ -11,7 +11,6 @@ Requirements:
 """
 
 import base64
-import json
 import sys
 import zlib
 from datetime import datetime, timezone

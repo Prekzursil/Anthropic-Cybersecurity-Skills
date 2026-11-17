@@ -6,6 +6,10 @@ Monitors CyberArk vault health, checks credential rotation status,
 audits safe permissions, and generates compliance reports for
 privileged access management.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import datetime
 from typing import Dict, List, Optional
@@ -118,7 +122,7 @@ class CyberArkPAMAuditor:
                             f"{days_since} days since rotation, policy: {max_days} days"
                         )
                 except ValueError:
-                    pass
+                    _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
             else:
                 overdue_accounts.append(
                     f"{acct.username}@{acct.address}: Never rotated"
@@ -164,7 +168,7 @@ class CyberArkPAMAuditor:
                             f"{acct.username}@{acct.address}: {days_since} days since verification"
                         )
                 except ValueError:
-                    pass
+                    _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
         if unverified:
             self.findings.append(PAMAuditFinding(
@@ -197,7 +201,7 @@ class CyberArkPAMAuditor:
                             f"{acct.username}@{acct.address}: {days_since} days since last access"
                         )
                 except ValueError:
-                    pass
+                    _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
         if stale:
             self.findings.append(PAMAuditFinding(

@@ -8,7 +8,6 @@ request tracking, breach notification management, and compliance reporting.
 
 import json
 import csv
-import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from dataclasses import dataclass, field, asdict

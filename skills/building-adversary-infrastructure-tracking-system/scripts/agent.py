@@ -3,6 +3,8 @@
 
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import argparse
 from datetime import datetime
 from collections import defaultdict
@@ -72,14 +74,14 @@ def build_infrastructure_map(seed_iocs, ioc_types):
                 node["urlhaus_urls"] = len(urlhaus.get("urls", []))
                 node["sources"].append("urlhaus")
         except requests.RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         try:
             tf = query_threatfox(ioc)
             if tf.get("query_status") == "ok" and tf.get("data"):
                 node["threatfox_hits"] = len(tf["data"])
                 node["sources"].append("threatfox")
         except requests.RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         infra_map["nodes"].append(node)
         infra_map["iocs"][ioc] = node
     return infra_map

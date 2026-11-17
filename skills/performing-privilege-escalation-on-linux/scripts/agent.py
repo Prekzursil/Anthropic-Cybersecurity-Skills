@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for performing Linux privilege escalation enumeration — authorized testing only."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -111,7 +115,7 @@ def check_writable_files():
         sensitive = [f for f in writable_files if any(p in f for p in ["/etc/", "/root/", "cron", ".service", "/bin/", "/sbin/"])]
         findings.extend([{"path": f, "writable": True, "severity": "HIGH"} for f in sensitive[:10]])
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"writable_findings": findings, "total_findings": len(findings)}
 
 
@@ -139,7 +143,7 @@ def check_cron_jobs():
         if result.returncode == 0:
             findings.append({"type": "user_crontab", "content": result.stdout[:500]})
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"cron_findings": findings}
 
 

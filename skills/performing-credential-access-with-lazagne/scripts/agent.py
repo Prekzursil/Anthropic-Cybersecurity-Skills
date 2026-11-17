@@ -6,6 +6,10 @@ endpoints by scanning for process artifacts, file system indicators,
 and Windows event log entries associated with credential dumping.
 Used for defensive detection and incident response, not offensive use.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import json
 import os
@@ -127,7 +131,7 @@ def check_windows_event_logs():
                     "description": "LaZagne process execution detected in event logs",
                 })
         except json.JSONDecodeError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     # Check for credential file access (Event ID 4663)
     ps_script2 = """
@@ -161,7 +165,7 @@ def check_windows_event_logs():
                     "description": "Credential store accessed by process",
                 })
         except json.JSONDecodeError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return findings
 

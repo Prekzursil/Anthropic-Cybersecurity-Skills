@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for hunting T1547.001 startup folder persistence on Windows."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import os
@@ -170,7 +174,7 @@ def check_registry_run_keys():
                                               "mshta", "-enc", "downloadstring"]),
                         })
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return entries
 
 
@@ -228,7 +232,7 @@ def monitor_startup(duration_seconds=60):
     try:
         time.sleep(duration_seconds)
     except KeyboardInterrupt:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     observer.stop()
     observer.join()
     return {"monitored_seconds": duration_seconds, "events_detected": handler.events}

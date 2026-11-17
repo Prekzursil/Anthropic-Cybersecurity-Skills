@@ -5,6 +5,10 @@ Audits systems and configurations against PCI DSS v4.0 requirements
 including network segmentation, encryption, access controls, logging,
 vulnerability management, and secure configuration checks.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import json
 import os
@@ -212,7 +216,7 @@ def check_network_segmentation(target_ip, ports=None):
                     "detail": f"{target_ip}:{port} is open from this network segment",
                 })
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     if not findings:
         findings.append({

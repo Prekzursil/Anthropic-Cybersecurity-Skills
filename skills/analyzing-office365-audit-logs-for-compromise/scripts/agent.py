@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for analyzing Office 365 audit logs for compromise indicators via Microsoft Graph."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -79,7 +83,7 @@ def query_audit_logs(token, days=7):
                     "details": log.get("additionalDetails"),
                 })
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     events.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
     return events
 

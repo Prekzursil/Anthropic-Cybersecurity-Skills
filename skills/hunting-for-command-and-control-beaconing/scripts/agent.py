@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for hunting C2 beaconing across multiple data sources."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -43,7 +47,7 @@ def analyze_dns_queries(dns_log_path):
                             "pattern": pattern,
                         })
     except FileNotFoundError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     high_freq = sorted(domain_counts.items(), key=lambda x: x[1], reverse=True)[:20]
     for domain, count in high_freq:
@@ -87,7 +91,7 @@ def analyze_http_logs(http_log_path):
                         "note": "Short random URI typical of C2 frameworks",
                     })
     except FileNotFoundError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 
@@ -124,7 +128,7 @@ def analyze_connection_patterns(conn_log_path):
                             "data_ratio": round(ratio, 2),
                         })
     except FileNotFoundError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 

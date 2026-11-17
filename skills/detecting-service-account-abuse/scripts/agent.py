@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for detecting service account abuse in Active Directory and cloud environments."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -92,7 +96,7 @@ def check_account_risks(accounts):
                 if age > 365:
                     issues.append(f"Password {age} days old")
             except ValueError:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         if issues:
             risks.append({"account": name, "issues": issues, "risk_count": len(issues)})
     return risks

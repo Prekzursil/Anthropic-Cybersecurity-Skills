@@ -4,6 +4,10 @@
 Monitors and analyzes ransomware group leak site data for threat intelligence,
 victim tracking, and TTI (time-to-intelligence) reporting.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import sys
 import json
@@ -80,7 +84,7 @@ def analyze_victim_data(victims):
                 dt = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
                 timeline[dt.strftime("%Y-%m")] += 1
             except (ValueError, TypeError):
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return {
         "total_victims": len(victims),
@@ -122,7 +126,7 @@ def assess_group_activity(victims, group_name, days=90):
                 if dt.replace(tzinfo=None) > cutoff:
                     recent.append(v)
             except (ValueError, TypeError):
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     info = RANSOMWARE_GROUPS.get(group_name.lower(), {})
     return {
