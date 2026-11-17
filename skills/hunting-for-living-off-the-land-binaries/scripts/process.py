@@ -4,6 +4,10 @@ LOLBin Threat Hunt Automation Script
 Queries Windows Event Logs and Sysmon for suspicious LOLBin activity.
 Supports Splunk API, Elastic API, and local Windows Event Log parsing.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import csv
@@ -17,7 +21,7 @@ from pathlib import Path
 try:
     import xml.etree.ElementTree as ET
 except ImportError:
-    pass
+    _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
 # Known LOLBins and their suspicious argument patterns
 LOLBIN_SIGNATURES = {

@@ -8,8 +8,11 @@ and generates a consolidated device posture compliance report.
 Requirements:
     pip install requests msal pandas
 """
+import logging
 
-import json
+_logger = logging.getLogger(__name__)
+
+
 import sys
 from datetime import datetime, timezone
 from typing import Any
@@ -187,7 +190,7 @@ class DevicePostureAuditor:
                     if (now - sync_dt).days > 30:
                         stats["stale_devices"] += 1
                 except (ValueError, TypeError):
-                    pass
+                    _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
         compliance_rate = (stats["compliant"] / stats["total"] * 100) if stats["total"] else 0
         print(f"  Total: {stats['total']}, Compliant: {stats['compliant']} ({compliance_rate:.1f}%)")

@@ -16,6 +16,10 @@ Usage:
 Requirements:
     pip install numpy scikit-learn tldextract
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import base64
@@ -26,7 +30,6 @@ import os
 import re
 import sys
 from collections import Counter, defaultdict
-from pathlib import Path
 
 import numpy as np
 
@@ -601,7 +604,7 @@ def analyze_txt_records(queries):
                             })
                             break
                 except Exception:
-                    pass
+                    _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         if indicators:
             findings.append({

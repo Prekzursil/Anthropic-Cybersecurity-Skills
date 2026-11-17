@@ -12,6 +12,10 @@ Usage:
     python process.py search --query "domain:evil.com"
     python process.py ioc --uuid <scan-uuid>
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -137,7 +141,7 @@ def search_scans(query: str, api_key: str = "", size: int = 10) -> list:
         if resp.status_code == 200:
             return resp.json().get("results", [])
     except Exception:
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
     return []
 
 
@@ -280,7 +284,7 @@ def check_virustotal(url: str, api_key: str = "") -> dict:
                 "undetected": stats.get("undetected", 0),
             }
     except Exception:
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
     return {}
 
 

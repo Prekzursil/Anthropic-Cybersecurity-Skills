@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for testing business logic vulnerabilities during authorized assessments."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import requests
 import json
@@ -164,7 +168,7 @@ def test_self_referral(base_url, token, referral_endpoint="/api/referrals/invite
         else:
             print(f"  [+] Self-referral blocked (status {resp.status_code})")
     except requests.RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return []
 
 

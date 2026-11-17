@@ -5,6 +5,10 @@ Runs aircrack-ng suite tools via subprocess for WiFi reconnaissance,
 WPA handshake capture, deauthentication testing, and generates
 a wireless security assessment report.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import subprocess
 import json
@@ -45,7 +49,7 @@ class WirelessPentestAgent:
                  "--output-format", "csv", "--write-interval", "1"],
                 capture_output=True, text=True, timeout=duration)
         except subprocess.TimeoutExpired:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         csv_file = Path(f"{csv_prefix}-01.csv")
         if csv_file.exists():
@@ -81,7 +85,7 @@ class WirelessPentestAgent:
                                 "encryption": enc or "Open",
                             })
         except (IndexError, UnicodeDecodeError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         return networks
 
     def capture_handshake(self, bssid, channel, duration=60):
@@ -93,7 +97,7 @@ class WirelessPentestAgent:
                  "-c", str(channel), "-w", cap_prefix],
                 capture_output=True, timeout=duration)
         except subprocess.TimeoutExpired:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         cap_file = Path(f"{cap_prefix}-01.cap")
         return {"capture_file": str(cap_file), "exists": cap_file.exists()}
 

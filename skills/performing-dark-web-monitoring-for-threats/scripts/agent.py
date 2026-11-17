@@ -6,6 +6,10 @@ breach databases (Have I Been Pwned API), paste sites, and public
 threat intelligence feeds for leaked credentials, exposed data, and
 mentions of organizational domains.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import hashlib
 import json
@@ -81,7 +85,7 @@ def check_hibp_email(email, api_key):
             pass  # Not found in any breaches
         time.sleep(1.5)  # HIBP rate limit
     except requests.RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 
@@ -141,7 +145,7 @@ def search_threat_intel_feeds(domain):
                         "samples": [u.get("url", "")[:80] for u in urls[:5]],
                     })
     except requests.RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     # Check AbuseIPDB
     abuse_key = os.environ.get("ABUSEIPDB_KEY", "")
@@ -153,7 +157,7 @@ def search_threat_intel_feeds(domain):
                 params={"network": domain}, timeout=15,
             )
         except requests.RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return findings
 

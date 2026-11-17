@@ -11,6 +11,10 @@ Usage:
     python process.py check-session --session-log sessions.json
     python process.py analyze-domain --domain suspicious-login.com
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -162,7 +166,7 @@ def detect_aitm_signins(signins: list) -> AiTMAnalysis:
                                 analysis.impossible_travel_detected += 1
                                 affected.add(user)
                     except (ValueError, TypeError):
-                        pass
+                        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
             # Check for session from different IP shortly after auth
             if i < len(sorted_events) - 1:
@@ -196,7 +200,7 @@ def detect_aitm_signins(signins: list) -> AiTMAnalysis:
                             analysis.session_replays_detected += 1
                             affected.add(user)
                     except (ValueError, TypeError):
-                        pass
+                        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     analysis.affected_users = list(affected)
     if affected:

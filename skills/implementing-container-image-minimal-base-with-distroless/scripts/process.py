@@ -5,6 +5,10 @@ Container Image Base Analysis Tool
 Analyzes container images to identify non-minimal base images and
 recommends distroless alternatives based on the application runtime.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import subprocess
@@ -47,7 +51,7 @@ def get_image_info(image: str) -> dict:
             if data:
                 return data[0]
         except json.JSONDecodeError:
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
     return {}
 
 

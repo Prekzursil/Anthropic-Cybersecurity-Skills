@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for testing sensitive data exposure vulnerabilities during authorized assessments."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import requests
 import re
@@ -160,7 +164,7 @@ def check_tls_config(host):
         else:
             print(f"  [+] HSTS: {hsts}")
     except requests.RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 

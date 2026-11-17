@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Serverless function security review agent using boto3."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import re
@@ -92,7 +96,7 @@ def check_public_access(client, function_name):
                     f"(statement: {stmt.get('Sid', 'unnamed')})"
                 )
     except ClientError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     try:
         urls = client.list_function_url_configs(FunctionName=function_name)
         for url_cfg in urls.get("FunctionUrlConfigs", []):
@@ -101,7 +105,7 @@ def check_public_access(client, function_name):
                     f"UNAUTHENTICATED URL: {function_name} -> {url_cfg['FunctionUrl']}"
                 )
     except ClientError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 

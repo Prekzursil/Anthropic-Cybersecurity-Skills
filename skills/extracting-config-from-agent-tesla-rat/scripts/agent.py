@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for extracting configuration from Agent Tesla RAT samples (malware analysis)."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import base64
@@ -54,7 +58,7 @@ def extract_strings(file_path, min_len=6):
         try:
             strings.append(match.group().decode("utf-16-le", errors="replace"))
         except UnicodeDecodeError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return strings
 
 
@@ -103,7 +107,7 @@ def decode_base64_strings(strings_list):
                 if any(c.isprintable() for c in d) and len(d) > 4:
                     decoded.append({"encoded": s[:40], "decoded": d[:100]})
             except Exception:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return decoded
 
 

@@ -4,6 +4,8 @@
 import json
 import argparse
 import logging
+
+_logger = logging.getLogger(__name__)
 import subprocess
 import re
 import xml.etree.ElementTree as ET
@@ -39,7 +41,7 @@ def get_domain_controllers():
                 "machine_account": dc.get("Name", "") + "$",
             })
     except json.JSONDecodeError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return dcs
 
 

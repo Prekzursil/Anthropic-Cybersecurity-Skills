@@ -10,7 +10,6 @@ Requirements:
     pip install pandas numpy scikit-learn
 """
 
-import csv
 import json
 from collections import defaultdict
 

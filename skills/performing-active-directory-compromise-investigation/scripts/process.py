@@ -5,8 +5,6 @@ including DCSync, Golden Ticket, Kerberoasting, and lateral movement.
 """
 
 import json
-import os
-import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 

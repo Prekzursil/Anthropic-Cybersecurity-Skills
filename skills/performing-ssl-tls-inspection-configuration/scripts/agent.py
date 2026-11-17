@@ -5,6 +5,10 @@ Verifies TLS inspection is working by comparing certificate issuers,
 validates CA deployment on endpoints, checks TLS version enforcement,
 audits decryption exemption lists, and monitors inspection health.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import ssl
 import socket
@@ -104,7 +108,7 @@ class TLSInspectionAgent:
                     data = [data]
                 return {"ca_deployed": True, "certificates": data}
         except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         return {"ca_deployed": False}
 
     def audit_exemptions(self, exempt_domains):

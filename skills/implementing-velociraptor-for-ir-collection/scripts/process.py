@@ -4,7 +4,6 @@ Manages artifact collection, hunt creation, and result analysis via Velociraptor
 """
 
 import json
-import os
 from datetime import datetime
 from pathlib import Path
 

@@ -16,6 +16,10 @@ Usage:
     python process.py --configure-feeds --misp-url URL --misp-key KEY
     python process.py --platform-stats --misp-url URL --misp-key KEY --opencti-url URL --opencti-token TOKEN
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -109,7 +113,7 @@ class TIPManager:
                     self.misp.enable_feed(feed_info["id"])
                     enabled.append(feed_info["name"])
                 except Exception:
-                    pass
+                    _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
         return {"enabled_feeds": enabled, "total_feeds": len(feeds)}
 

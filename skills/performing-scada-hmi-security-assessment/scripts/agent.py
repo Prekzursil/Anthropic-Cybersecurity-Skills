@@ -2,6 +2,10 @@
 """SCADA HMI Security Assessment agent — analyzes SCADA HMI configurations
 for security weaknesses including default credentials, unencrypted protocols,
 and missing access controls."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -55,7 +59,7 @@ def scan_open_ports(target: str, ports: list[int] = None, timeout: float = 2.0) 
                 })
             sock.close()
         except socket.error:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return results
 
 

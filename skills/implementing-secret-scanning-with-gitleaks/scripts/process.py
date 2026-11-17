@@ -10,6 +10,10 @@ Usage:
     python process.py --repo-path . --scan-type protect --staged
     python process.py --repo-path . --baseline .gitleaks-baseline.json --output report.json
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -83,7 +87,7 @@ def run_gitleaks(repo_path: str, scan_type: str = "detect",
             try:
                 findings = json.loads(proc.stdout)
             except json.JSONDecodeError:
-                pass
+                _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
         return {
             "findings": findings if isinstance(findings, list) else [],

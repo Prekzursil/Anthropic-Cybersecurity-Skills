@@ -5,6 +5,10 @@ Audits CyberArk Privileged Access Management via the REST API to
 verify safe configurations, privileged account inventory, platform
 assignments, and password rotation compliance.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import json
 import os
@@ -165,7 +169,7 @@ def logoff(pvwa_url, token):
                       verify=not os.environ.get("SKIP_TLS_VERIFY", "").lower() == "true", timeout=10)  # Set SKIP_TLS_VERIFY=true for self-signed certs in lab environments
         print("[+] Session ended")
     except requests.RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
 
 def format_summary(safe_findings, acct_findings, plat_findings, safes, accounts):

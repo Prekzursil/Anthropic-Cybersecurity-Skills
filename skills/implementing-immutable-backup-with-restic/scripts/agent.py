@@ -10,6 +10,8 @@ import sys
 import json
 import hashlib
 import logging
+
+_logger = logging.getLogger(__name__)
 import argparse
 import subprocess
 import tempfile
@@ -192,7 +194,7 @@ def list_snapshots(repo_url, password, env_extra=None):
                 ],
             }
         except json.JSONDecodeError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"count": 0, "snapshots": []}
 
 
@@ -265,7 +267,7 @@ def test_restore(repo_url, password, snapshot_id="latest", target_path=None,
     try:
         shutil.rmtree(target_path)
     except OSError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     logger.info("Restore test: %d files verified from snapshot %s", len(restored_files), snapshot_id)
     return {
@@ -288,7 +290,7 @@ def get_repository_stats(repo_url, password, env_extra=None):
         try:
             stats = json.loads(result["stdout"])
         except json.JSONDecodeError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     raw_result = run_restic(
         ["stats", "--json", "--mode", "raw-data"],
@@ -299,7 +301,7 @@ def get_repository_stats(repo_url, password, env_extra=None):
         try:
             raw_stats = json.loads(raw_result["stdout"])
         except json.JSONDecodeError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     restore_size = stats.get("total_size", 0)
     raw_size = raw_stats.get("total_size", 0)

@@ -5,6 +5,10 @@ Audits Kubernetes network policies, identifies unprotected
 namespaces, validates Calico policy enforcement, and generates
 default-deny baseline policy manifests.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -53,7 +57,7 @@ class CalicoNetworkPolicyAgent:
                 self.v1 = client.CoreV1Api()
                 self.net_v1 = client.NetworkingV1Api()
             except Exception:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     def _run_calicoctl(self, args):
         """Run calicoctl command and return parsed output."""
@@ -92,7 +96,7 @@ class CalicoNetworkPolicyAgent:
                     policies.append({"kind": "NetworkPolicy", "name": meta.get("name"),
                                      "namespace": meta.get("namespace")})
             except json.JSONDecodeError:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         stdout, rc = self._run_calicoctl(["get", "globalnetworkpolicy", "-o", "json"])
         if rc == 0 and stdout.strip():
@@ -103,7 +107,7 @@ class CalicoNetworkPolicyAgent:
                     policies.append({"kind": "GlobalNetworkPolicy",
                                      "name": item.get("metadata", {}).get("name")})
             except json.JSONDecodeError:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         return policies
 
     def find_unprotected_namespaces(self):

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Suricata IDS/IPS monitoring and EVE JSON log analysis agent."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import os
@@ -36,7 +40,7 @@ def check_suricata_status():
         r = subprocess.run(["pgrep", "-x", "suricata"], capture_output=True, text=True, timeout=120)
         running = r.returncode == 0
     except FileNotFoundError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return {**version, "running": running}
 

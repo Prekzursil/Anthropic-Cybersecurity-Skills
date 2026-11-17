@@ -5,6 +5,10 @@ Discovers service accounts via LDAP queries, AWS IAM, and Azure AD,
 checks password age, privilege levels, and orphan status, then
 generates a risk-classified compliance report.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -88,7 +92,7 @@ class ServiceAccountAuditor:
                 self.accounts.extend(svc_users)
                 return svc_users
         except (FileNotFoundError, json.JSONDecodeError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         return []
 
     def assess_risk(self, account):

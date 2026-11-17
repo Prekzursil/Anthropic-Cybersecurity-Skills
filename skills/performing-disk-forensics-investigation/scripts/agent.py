@@ -5,6 +5,10 @@ Performs disk forensics analysis including image verification, file system
 parsing, deleted file recovery, and timeline generation using pytsk3 and
 hashlib for evidence integrity.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import hashlib
 import json
@@ -140,7 +144,7 @@ def find_deleted_files(image_path: str) -> list[dict]:
                     sub_dir = fs.open_dir(inode=meta.addr)
                     walk_directory(sub_dir, f"{path}{name}/")
                 except Exception:
-                    pass
+                    _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     try:
         root = fs.open_dir("/")

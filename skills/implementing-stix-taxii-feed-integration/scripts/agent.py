@@ -7,7 +7,6 @@ malware families, and attack patterns from STIX bundles.
 """
 import argparse
 import json
-import os
 import sys
 from datetime import datetime, timezone
 

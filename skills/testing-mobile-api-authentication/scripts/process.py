@@ -8,6 +8,10 @@ JWT analysis, IDOR detection, and session management assessment.
 Usage:
     python process.py --base-url https://api.target.com --token <JWT> [--output report.json]
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import base64
@@ -116,7 +120,7 @@ class MobileAPIAuthTester:
                     }
                     results.append(result)
             except requests.RequestException:
-                pass
+                _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
             time.sleep(0.5)  # Rate limiting
 
         if results:
@@ -155,7 +159,7 @@ class MobileAPIAuthTester:
                 self.findings.append(finding)
                 return finding
         except Exception:
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
         return {"check": "expired_token", "skipped": True, "reason": "token_not_expired"}
 
@@ -175,7 +179,7 @@ class MobileAPIAuthTester:
                         "severity": "CRITICAL",
                     })
             except requests.RequestException:
-                pass
+                _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
             time.sleep(0.5)
 
         if results:

@@ -5,6 +5,10 @@ Trivy Docker Image Scanner - Automated scanning and reporting tool.
 Scans Docker images with Trivy, parses results, enforces severity gates,
 and generates actionable reports.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import subprocess
 import json
@@ -47,7 +51,7 @@ def check_trivy_installed() -> bool:
             print(f"[*] {version_line}")
             return True
     except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
     print("[!] Trivy is not installed. Install from https://trivy.dev")
     return False
 

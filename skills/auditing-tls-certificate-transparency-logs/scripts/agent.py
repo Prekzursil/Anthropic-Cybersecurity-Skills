@@ -8,7 +8,8 @@ For authorized security monitoring and defensive operations only.
 import argparse
 import json
 import logging
-import re
+
+_logger = logging.getLogger(__name__)
 import smtplib
 import socket
 import sqlite3
@@ -263,7 +264,7 @@ def resolve_subdomain(subdomain: str, timeout: float = 5.0) -> dict:
             for rdata in answers:
                 result["cname"] = str(rdata.target).rstrip(".")
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         # A record resolution
         ips = socket.getaddrinfo(subdomain, None, socket.AF_UNSPEC, socket.SOCK_STREAM)
@@ -275,7 +276,7 @@ def resolve_subdomain(subdomain: str, timeout: float = 5.0) -> dict:
                 seen.add(ip)
         result["resolved"] = len(result["ips"]) > 0
     except socket.gaierror:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     except Exception as exc:
         logger.debug("DNS resolution failed for %s: %s", subdomain, exc)
     finally:

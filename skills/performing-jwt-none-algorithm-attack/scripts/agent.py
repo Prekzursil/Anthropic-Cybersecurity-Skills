@@ -3,6 +3,10 @@
 # Usage against targets without prior mutual consent is illegal.
 # It is the end user's responsibility to obey all applicable local, state and federal laws.
 """Agent for performing JWT 'none' algorithm attack testing."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -119,7 +123,7 @@ def test_jwt_endpoint(url, original_token, forged_tokens, headers=None):
         resp = requests.get(url, headers={**hdrs, "Authorization": f"Bearer {original_token}"}, timeout=10)
         orig_resp = {"status": resp.status_code, "body_length": len(resp.text)}
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     vulnerable = [r for r in results if r.get("accepted")]
     return {
         "url": url, "original_response": orig_resp,

@@ -6,6 +6,10 @@ Discovers, classifies, and audits service accounts across enterprise
 infrastructure. Identifies orphaned, over-privileged, and non-compliant
 service accounts with remediation recommendations.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import datetime
 from typing import Dict, List, Optional
@@ -92,7 +96,7 @@ class ServiceAccountAuditor:
                     if age > self.password_max_age:
                         stale_pwd.append(f"{a.username}@{a.platform}: {age} days old")
                 except ValueError:
-                    pass
+                    _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
             else:
                 stale_pwd.append(f"{a.username}@{a.platform}: unknown age")
 
@@ -118,7 +122,7 @@ class ServiceAccountAuditor:
                     if (now - last).days > self.stale_threshold:
                         stale.append(a)
                 except ValueError:
-                    pass
+                    _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
             elif not a.last_logon:
                 stale.append(a)
 

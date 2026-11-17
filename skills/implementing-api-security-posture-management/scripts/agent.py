@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for API Security Posture Management - discovery, classification, and risk scoring."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -102,7 +106,7 @@ def check_api_security_controls(apis, spec_path=None):
                 spec = yaml.safe_load(f) if spec_path.endswith((".yaml", ".yml")) else json.load(f)
             spec_paths = set(spec.get("paths", {}).keys())
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     for api in apis:
         if spec_paths and api["path"] not in spec_paths:
             findings.append({

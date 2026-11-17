@@ -3,6 +3,10 @@
 # Usage against targets without prior mutual consent is illegal.
 # It is the end user's responsibility to obey all applicable local, state and federal laws.
 """Web cache poisoning assessment agent using requests and subprocess."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import sys
 import json
@@ -72,7 +76,7 @@ def test_cache_hit_miss(target_url):
                 "status": resp.status_code,
             })
         except RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         time.sleep(1)
     return {"test_url": test_url, "results": results}
 
@@ -113,7 +117,7 @@ def test_unkeyed_headers(target_url):
                     "risk": "CRITICAL" if cached_poison else "HIGH",
                 })
         except RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 
@@ -137,7 +141,7 @@ def test_cache_key_normalization(target_url):
                 "content_length": len(resp.content),
             })
         except RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return tests
 
 
@@ -165,7 +169,7 @@ def test_cache_deception(target_url):
                     "risk": "HIGH",
                 })
         except RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 

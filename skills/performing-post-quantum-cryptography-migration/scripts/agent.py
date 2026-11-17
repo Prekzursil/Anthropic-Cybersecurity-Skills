@@ -13,9 +13,10 @@ import sys
 import json
 import ssl
 import socket
-import struct
 import argparse
 import logging
+
+_logger = logging.getLogger(__name__)
 import subprocess
 import re
 from datetime import datetime, timezone
@@ -306,7 +307,7 @@ def _parse_certificate(cert, cert_der=None):
             cert_details = _openssl_parse_cert_der(cert_der)
             cert_info.update(cert_details)
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return cert_info
 
@@ -342,7 +343,7 @@ def _openssl_parse_cert_der(cert_der):
             details["ec_curve"] = ec_match.group(1).strip()
 
     except (subprocess.TimeoutExpired, FileNotFoundError):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return details
 
@@ -1269,7 +1270,7 @@ def check_openssl_pqc_support():
             if line.strip() and "name:" in line.lower()
         ]
     except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     # Check for PQC KEM algorithms
     try:
@@ -1281,7 +1282,7 @@ def check_openssl_pqc_support():
             if any(pqc in line for pqc in ["mlkem", "kyber", "bike", "hqc", "frodo"]):
                 result["pqc_kem_algorithms"].append(line)
     except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     # Check for PQC signature algorithms
     try:
@@ -1293,7 +1294,7 @@ def check_openssl_pqc_support():
             if any(pqc in line for pqc in ["mldsa", "dilithium", "slhdsa", "sphincs", "falcon"]):
                 result["pqc_signature_algorithms"].append(line)
     except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     # Check for hybrid groups
     try:
@@ -1305,7 +1306,7 @@ def check_openssl_pqc_support():
             if any(pqc in line_stripped.lower() for pqc in ["mlkem", "kyber"]):
                 result["hybrid_groups"].append(line_stripped)
     except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     result["pqc_ready"] = bool(
         result["pqc_kem_algorithms"] or result["pqc_signature_algorithms"]

@@ -8,8 +8,6 @@ management, and audit readiness checks for ISO/IEC 27001:2022 implementation.
 
 import json
 import csv
-import os
-import sys
 from datetime import datetime, timedelta
 from typing import Optional
 from pathlib import Path

@@ -6,6 +6,10 @@ processing/normalization of IOCs, analysis/enrichment via VirusTotal
 and AbuseIPDB, dissemination to SIEM/firewalls, and tracking of
 IOC aging and confidence scoring.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import csv
 import hashlib
@@ -126,7 +130,7 @@ def enrich_ioc_virustotal(ioc_value, ioc_type, api_key):
                 "source": "virustotal",
             }
     except requests.RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {}
 
 
@@ -160,7 +164,7 @@ def calculate_confidence(ioc, enrichment=None):
             elif age_days > 90:
                 score = max(score - 10, 0)
         except (ValueError, TypeError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return min(max(score, 0), 100)
 

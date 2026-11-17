@@ -5,9 +5,12 @@ Audits an OpenTAXII server instance by checking service discovery,
 collection availability, content block statistics, and API health.
 Supports both TAXII 1.1 and 2.0/2.1 endpoints.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import json
-import os
 import sys
 from datetime import datetime, timezone
 
@@ -185,7 +188,7 @@ def check_server_health(base_url):
                 "detail": f"{response_time:.2f}s",
             })
     except requests.RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return findings
 

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for detecting T1548 Abuse Elevation Control Mechanism (UAC bypass, sudo abuse)."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -52,7 +56,7 @@ def check_uac_bypass_registry():
                     "severity": "HIGH",
                 })
         except subprocess.SubprocessError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 
@@ -91,7 +95,7 @@ def check_uac_bypass_processes():
                     "commandline": evt.get("CommandLine", "")[:200],
                 })
     except (subprocess.SubprocessError, json.JSONDecodeError):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 
@@ -118,7 +122,7 @@ def check_linux_sudo_abuse():
                                 "pattern": pat,
                             })
         except PermissionError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     try:
         result = subprocess.check_output(
@@ -133,7 +137,7 @@ def check_linux_sudo_abuse():
                         "severity": "MEDIUM",
                     })
     except subprocess.SubprocessError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 
@@ -154,7 +158,7 @@ def check_setuid_binaries():
             if path and path not in known_suid:
                 findings.append({"type": "unusual_suid", "path": path})
     except subprocess.SubprocessError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 

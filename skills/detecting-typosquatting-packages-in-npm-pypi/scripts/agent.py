@@ -5,6 +5,8 @@ download count anomalies."""
 
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import argparse
 import re
 import time
@@ -275,7 +277,7 @@ def compute_suspicion_score(candidate_meta, target_meta, target_name, registry):
             elif days_old <= 180:
                 score += 8
         except (ValueError, TypeError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     # Download disparity
     if registry == "pypi":

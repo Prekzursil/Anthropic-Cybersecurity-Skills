@@ -6,7 +6,6 @@ import argparse
 import base64
 import json
 import logging
-import struct
 import sys
 from datetime import datetime, timezone
 

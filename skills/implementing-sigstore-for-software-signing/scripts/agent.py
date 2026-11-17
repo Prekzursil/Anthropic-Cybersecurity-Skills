@@ -5,6 +5,8 @@ images and software artifacts."""
 
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import argparse
 import subprocess
 import hashlib
@@ -76,7 +78,7 @@ def sign_blob_keyless(filepath, bundle_path=None):
             with open(bundle_path, "r") as f:
                 bundle_data = json.load(f)
         except (json.JSONDecodeError, FileNotFoundError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         return {
             "signed": True,
             "file": str(filepath),

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """PowerShell Script Block Logging threat hunting agent."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -150,7 +154,7 @@ def detect_obfuscation(script_text):
                     "decoded_preview": decoded[:200],
                 })
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 

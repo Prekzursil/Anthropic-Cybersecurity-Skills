@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for detecting C2 beaconing through network traffic frequency analysis."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -25,7 +29,7 @@ def parse_zeek_conn_log(log_path):
                 key = f"{src}->{dst}:{dst_port}"
                 connections[key].append(ts)
     except (FileNotFoundError, ValueError):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return connections
 
 
@@ -93,7 +97,7 @@ def parse_csv_log(csv_path):
                             continue
                     connections[f"{src}->{dst}:{port}"].append(ts_float)
     except (FileNotFoundError, KeyError):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return connections
 
 

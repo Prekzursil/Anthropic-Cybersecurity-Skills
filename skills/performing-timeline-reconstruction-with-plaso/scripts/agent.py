@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Forensic timeline reconstruction agent using Plaso subprocess wrappers."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import subprocess
 import os
@@ -90,7 +94,7 @@ def analyze_timeline_csv(csv_path, max_rows=500000):
                 hour_key = dt.strftime("%Y-%m-%d %H:00")
                 events_by_hour[hour_key] += 1
             except (ValueError, TypeError):
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     avg_per_hour = total / max(len(events_by_hour), 1)
     spikes = {
         h: c for h, c in events_by_hour.items() if c > avg_per_hour * 3

@@ -4,6 +4,8 @@
 import argparse
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import os
 import sys
 from datetime import datetime
@@ -77,7 +79,7 @@ def check_siem_detection(siem_url: str, api_key: str, technique_id: str,
             alerts = resp.json().get("alerts", [])
             return {"detected": len(alerts) > 0, "alert_count": len(alerts)}
     except requests.RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"detected": False, "alert_count": 0}
 
 

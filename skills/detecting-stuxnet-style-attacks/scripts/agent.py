@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for detecting Stuxnet-style ICS/SCADA attacks targeting PLCs."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -65,7 +69,7 @@ def check_plc_communication(pcap_path):
                                     "func_code": fc,
                                 })
                     except ValueError:
-                        pass
+                        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         if write_count > 100:
             findings.append({
                 "alert": f"Excessive PLC write operations: {write_count}",
@@ -110,7 +114,7 @@ def check_registry_indicators():
                     "severity": "CRITICAL",
                 })
         except subprocess.SubprocessError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 

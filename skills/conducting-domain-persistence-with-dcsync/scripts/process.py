@@ -7,7 +7,6 @@ analyzes dumped credential data. For authorized red team engagements only.
 """
 
 import sys
-import os
 import re
 from datetime import datetime
 from collections import defaultdict

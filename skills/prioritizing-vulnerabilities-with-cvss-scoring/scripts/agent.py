@@ -5,6 +5,10 @@ Calculates CVSS v3.1 base scores from metric vectors, enriches
 with EPSS exploit probability and KEV catalog data, and generates
 a risk-prioritized remediation report.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import requests
@@ -97,7 +101,7 @@ class CVSSPrioritizationAgent:
                         "percentile": float(entry.get("percentile", 0)),
                     }
         except requests.RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         return scores
 
     def fetch_kev(self):
@@ -110,7 +114,7 @@ class CVSSPrioritizationAgent:
                 return {v["cveID"] for v in
                         resp.json().get("vulnerabilities", [])}
         except requests.RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         return set()
 
     def add_vulnerability(self, cve_id, vector, description=""):

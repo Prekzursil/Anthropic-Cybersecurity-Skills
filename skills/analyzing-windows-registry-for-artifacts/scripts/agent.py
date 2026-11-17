@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for analyzing Windows Registry hives for forensic artifacts."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import os
 import json
@@ -33,7 +37,7 @@ def extract_autorun_entries(software_hive_path):
                     "last_modified": str(key.header.last_modified),
                 })
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return entries
 
 
@@ -56,7 +60,7 @@ def extract_user_autorun(ntuser_path):
                     "last_modified": str(key.header.last_modified),
                 })
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return entries
 
 
@@ -107,9 +111,9 @@ def extract_recent_docs(ntuser_path):
                     name = val.value.split(b"\x00\x00")[0].decode("utf-16-le", errors="ignore")
                     docs.append({"index": val.name, "filename": name})
                 except Exception:
-                    pass
+                    _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return docs
 
 
@@ -124,12 +128,12 @@ def extract_system_info(system_hive_path):
         cn_key = reg.get_key(f"{cs}\\Control\\ComputerName\\ComputerName")
         info["computer_name"] = cn_key.get_value("ComputerName")
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     try:
         tz_key = reg.get_key(f"{cs}\\Control\\TimeZoneInformation")
         info["timezone"] = tz_key.get_value("TimeZoneKeyName")
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return info
 
 
@@ -148,7 +152,7 @@ def extract_installed_software(software_hive_path):
             if "DisplayName" in entry:
                 software.append(entry)
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return software
 
 

@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """Deleted file recovery agent using PhotoRec subprocess wrapper."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import subprocess
 import os
 import sys
-import json
 import hashlib
 from pathlib import Path
 from collections import defaultdict
@@ -113,7 +116,7 @@ def hash_recovered_files(output_dir, extensions=None):
                     "size": os.path.getsize(filepath),
                 })
             except (OSError, PermissionError):
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return hashes
 
 
@@ -155,7 +158,7 @@ def sort_recovered_files(output_dir, sorted_dir):
                 os.rename(src, dst)
                 moved[target_cat] += 1
             except OSError:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return dict(moved)
 
 

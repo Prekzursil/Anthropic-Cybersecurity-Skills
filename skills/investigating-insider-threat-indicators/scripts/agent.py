@@ -4,6 +4,10 @@ Insider Threat Investigation Agent
 Automates insider threat indicator collection by correlating SIEM data,
 DLP alerts, access logs, and HR events to build investigation timelines.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import csv
 import hashlib
@@ -88,7 +92,7 @@ def analyze_access_patterns(access_logs: list[dict], subject_user: str) -> dict:
             if weekday >= 5:
                 weekend_events.append(log)
         except (ValueError, AttributeError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         unique_apps.add(log.get("application", "unknown"))
         unique_ips.add(log.get("source_ip", "unknown"))

@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # For authorized testing only
 """API rate limiting bypass testing agent."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -65,7 +69,7 @@ def test_header_bypass(url, auth_header=None, request_count=30):
                 baseline_hit = i + 1
                 break
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     else:
         findings.append({
             "test": "baseline",
@@ -86,7 +90,7 @@ def test_header_bypass(url, auth_header=None, request_count=30):
                 if resp.status_code != 429:
                     success_count += 1
             except Exception:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         if success_count > 5:
             findings.append({
@@ -165,7 +169,7 @@ def test_path_bypass(url, auth_header=None):
                     "severity": "MEDIUM",
                 })
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 
@@ -190,7 +194,7 @@ def test_encoding_bypass(url, auth_header=None):
                 "severity": "HIGH",
             })
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return findings
 

@@ -4,11 +4,14 @@
 Manages Falco rules, parses Falco alert output, and generates
 escape detection reports from Falco JSON event streams.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
 import subprocess
-import sys
 from datetime import datetime
 
 ESCAPE_RULE_TAGS = ["container", "escape", "T1611", "T1610", "namespace",
@@ -28,13 +31,13 @@ def check_falco_status():
             version = result.stdout.strip()
             return {"installed": True, "version": version}
     except FileNotFoundError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     try:
         result = subprocess.run(["systemctl", "is-active", "falco"],
                                 capture_output=True, text=True, timeout=5)
         return {"installed": True, "service_status": result.stdout.strip()}
     except FileNotFoundError:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"installed": False}
 
 

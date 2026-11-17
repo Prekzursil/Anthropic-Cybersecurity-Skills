@@ -3,6 +3,8 @@
 
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import argparse
 import subprocess
 from collections import defaultdict
@@ -136,7 +138,7 @@ def build_access_baseline(events):
                 dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
                 hourly_counts[dt.hour] += 1
         except (ValueError, AttributeError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         user_counts[event["user_arn"]] += 1
         if event["source_ip"]:
             ip_set.add(event["source_ip"])

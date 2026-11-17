@@ -6,6 +6,10 @@ checking udev rules, USBGuard configuration, Windows Group Policy
 settings, and connected device history. Reports unauthorized or
 unwhitelisted USB devices.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import json
 import os
@@ -102,7 +106,7 @@ def audit_linux_udev():
                     findings.append({"check": f"udev USB rule: {fname}", "status": "INFO",
                                     "severity": "INFO", "detail": fpath})
             except (IOError, PermissionError):
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     if not usb_rules_found:
         findings.append({"check": "udev USB rules", "status": "WARN",
@@ -136,7 +140,7 @@ def list_connected_usb_devices():
                         "class": dev.get("Class", "USB"),
                     })
             except json.JSONDecodeError:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     else:
         result = subprocess.run(
             ["lsusb"],

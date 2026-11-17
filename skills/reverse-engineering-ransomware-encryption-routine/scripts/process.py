@@ -12,6 +12,10 @@ Usage:
     python process.py --sample ransomware.exe
     python process.py --encrypted-file encrypted.docx.locked
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -87,7 +91,7 @@ def analyze_sample(filepath):
                                     "operation": op,
                                 })
         except Exception:
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     # Crypto constants
     if data.find(AES_SBOX_PREFIX) != -1:

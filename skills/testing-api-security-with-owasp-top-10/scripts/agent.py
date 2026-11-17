@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for automated API security testing against OWASP API Security Top 10."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import os
 import requests
@@ -81,7 +85,7 @@ def test_data_exposure(base_url, token, endpoints):
                         })
                         print(f"  [!] {url}: Exposes {exposed}")
                 except json.JSONDecodeError:
-                    pass
+                    _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         except requests.RequestException:
             continue
     return findings

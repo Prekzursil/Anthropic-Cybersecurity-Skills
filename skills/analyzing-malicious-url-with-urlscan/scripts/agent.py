@@ -4,6 +4,8 @@
 import json
 import time
 import logging
+
+_logger = logging.getLogger(__name__)
 import argparse
 from datetime import datetime
 
@@ -35,7 +37,7 @@ def get_scan_result(uuid, api_key, max_wait=120):
             if resp.status_code == 200:
                 return resp.json()
         except requests.RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         time.sleep(5)
     return None
 
@@ -80,7 +82,7 @@ def analyze_result(result):
                 if exp < datetime.now(exp.tzinfo):
                     findings.append({"type": "Expired TLS certificate", "severity": "medium", "subject": cert.get("subjectName")})
             except (ValueError, TypeError):
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     js_count = len([r for r in stats.get("resourceStats", []) if "javascript" in r.get("type", "").lower()])
     if js_count > 20:

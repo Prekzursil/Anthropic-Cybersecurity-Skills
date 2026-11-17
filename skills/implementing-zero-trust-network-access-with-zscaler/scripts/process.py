@@ -6,6 +6,10 @@ This script performs pre-deployment checks for Zscaler Private Access (ZPA)
 implementation, validates existing configurations, and generates deployment
 readiness reports.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import csv
@@ -13,7 +17,6 @@ import socket
 import ssl
 import ipaddress
 from datetime import datetime
-from pathlib import Path
 
 
 def check_dns_resolution(fqdn: str) -> dict:
@@ -124,7 +127,7 @@ def validate_app_segment_config(config: dict) -> list:
                     "message": f"Broad IP range {ip} (/{network.prefixlen}). Consider narrowing to specific hosts."
                 })
         except ValueError:
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     if config.get("bypass_type") == "always":
         issues.append({

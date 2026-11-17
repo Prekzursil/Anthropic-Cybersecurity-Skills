@@ -6,7 +6,6 @@ import subprocess
 import os
 import sys
 import json
-import csv
 import datetime
 
 

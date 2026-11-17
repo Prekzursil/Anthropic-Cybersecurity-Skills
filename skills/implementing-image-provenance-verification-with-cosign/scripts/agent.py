@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for verifying container image provenance using Sigstore Cosign."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import argparse
@@ -34,7 +38,7 @@ def verify_image(image_ref, key=None, certificate_identity=None, certificate_oid
         try:
             attestations = json.loads(result["stdout"])
         except json.JSONDecodeError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {
         "image": image_ref,
         "verified": verified,

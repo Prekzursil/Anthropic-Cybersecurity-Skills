@@ -5,6 +5,10 @@ Audits network exposure, authentication configuration, data
 integrity protections, and DMZ replication architecture of
 process historian servers (OSIsoft PI, AVEVA, Honeywell PHD).
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import socket
@@ -57,7 +61,7 @@ class HistorianSecurityAgent:
                         "unnecessary": port in UNNECESSARY_PORTS,
                     })
             except (socket.error, OSError):
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
         for svc in exposed:
             if svc["unnecessary"]:

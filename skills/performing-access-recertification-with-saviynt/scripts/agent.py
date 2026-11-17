@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for managing Saviynt access recertification campaigns via REST API."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import os
 import requests
@@ -97,7 +101,7 @@ def check_overdue_campaigns(base_url, headers):
                     overdue.append({"name": c.get("certificationname"),
                                     "due": due, "certifier": c.get("certifier")})
             except ValueError:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     print(f"\n[*] Overdue campaigns: {len(overdue)}")
     for o in overdue:
         print(f"  [!] {o['name']} (due: {o['due']}, certifier: {o['certifier']})")

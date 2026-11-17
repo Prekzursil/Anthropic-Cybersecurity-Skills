@@ -11,6 +11,10 @@ Usage:
     python process.py --decay --db lifecycle_db.json
     python process.py --review --db lifecycle_db.json --output review_report.json
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import csv
@@ -99,7 +103,7 @@ def main():
     try:
         mgr.load(args.db)
     except FileNotFoundError:
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     if args.import_iocs:
         with open(args.import_iocs) as f:

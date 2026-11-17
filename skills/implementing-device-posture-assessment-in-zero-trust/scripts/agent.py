@@ -4,6 +4,8 @@
 import argparse
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import os
 import platform
 import subprocess
@@ -87,7 +89,7 @@ def check_antivirus() -> dict:
                 return {"enabled": data.get("RealTimeProtectionEnabled", False),
                         "tool": "Windows Defender"}
         except (FileNotFoundError, json.JSONDecodeError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"enabled": False, "tool": "unknown"}
 
 
@@ -103,7 +105,7 @@ def check_screen_lock() -> dict:
             timeout = int(result.stdout.strip()) if result.stdout.strip() else 0
             return {"configured": timeout > 0, "timeout_seconds": timeout}
         except (FileNotFoundError, ValueError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"configured": False, "timeout_seconds": 0}
 
 

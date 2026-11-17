@@ -11,6 +11,10 @@ Analyzes network logs (Zeek format) to detect ransomware precursor patterns:
 
 Reads Zeek TSV logs and generates structured alerts.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import os
@@ -111,7 +115,7 @@ class BeaconDetector:
                         size_cv = statistics.stdev(orig_sizes) / statistics.mean(orig_sizes)
                         size_consistency = max(0, 1.0 - size_cv)
                     except (statistics.StatisticsError, ZeroDivisionError):
-                        pass
+                        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
                 combined_score = (result["score"] * 0.7) + (size_consistency * 0.3)
 
@@ -367,7 +371,7 @@ class RansomwarePrecursorEngine:
             if first == 192 and second == 168:
                 return True
         except ValueError:
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
         return False
 
     def run_detection(self) -> list:

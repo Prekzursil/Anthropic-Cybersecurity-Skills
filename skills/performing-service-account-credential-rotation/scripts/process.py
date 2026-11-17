@@ -12,6 +12,8 @@ Requirements:
 
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import secrets
 import string
 from datetime import datetime, timezone
@@ -121,7 +123,7 @@ class CredentialRotator:
                         client.delete_service_account_key(request={"name": key.name})
                         old_keys_deleted.append(key.name)
                     except Exception:
-                        pass
+                        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
             result = {
                 "success": True,

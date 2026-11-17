@@ -6,9 +6,12 @@ Automates access review campaigns by collecting entitlement data,
 assigning reviewers, tracking certification decisions, generating
 compliance reports, and identifying SOD violations.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import datetime
-import io
 from dataclasses import dataclass, field
 from collections import defaultdict
 
@@ -137,7 +140,7 @@ class AccessReviewEngine:
                     if (now - last).days > days_threshold:
                         stale.append(ent)
                 except ValueError:
-                    pass
+                    _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
             else:
                 stale.append(ent)
 

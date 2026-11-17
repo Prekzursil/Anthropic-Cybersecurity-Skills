@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # For authorized testing only
 """API inventory and discovery agent for attack surface mapping."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -57,7 +61,7 @@ def discover_api_endpoints(base_url, paths=None, timeout=5):
                     entry["severity"] = "INFO"
                 discovered.append(entry)
         except requests.exceptions.RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return discovered
 
 
@@ -143,7 +147,7 @@ def enumerate_subdomains_for_apis(domain):
                     "severity": "MEDIUM" if "internal" in prefix or "staging" in prefix else "INFO",
                 })
         except (subprocess.TimeoutExpired, FileNotFoundError):
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return found
 
 

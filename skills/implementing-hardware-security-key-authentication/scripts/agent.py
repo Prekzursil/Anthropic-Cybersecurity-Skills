@@ -16,15 +16,12 @@ import os
 import secrets
 import sqlite3
 import sys
-import time
 from datetime import datetime, timezone
 
 
 from fido2.server import Fido2Server
 from fido2.webauthn import (
     AttestationConveyancePreference,
-    AuthenticatorAttachment,
-    AuthenticatorSelectionCriteria,
     PublicKeyCredentialDescriptor,
     PublicKeyCredentialRpEntity,
     PublicKeyCredentialUserEntity,

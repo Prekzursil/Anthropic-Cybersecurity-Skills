@@ -6,6 +6,10 @@ against known vulnerabilities, tracking patch SLA adherence, and
 generating remediation reports. Supports Linux (apt/yum) and basic
 CVE cross-referencing via the CISA KEV catalog.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 import argparse
 import json
 import os
@@ -123,7 +127,7 @@ def check_windows_updates():
                 installed_date = latest.get("InstalledOn", "")
                 print(f"[+] Latest patch: {latest.get('HotFixID', 'N/A')} ({installed_date})")
         except json.JSONDecodeError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return findings
 

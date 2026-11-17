@@ -5,6 +5,10 @@ Tailscale Zero Trust VPN Management and Monitoring.
 Manages Tailscale deployment, ACL generation, network health monitoring,
 and compliance reporting for zero trust mesh VPN infrastructure.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import subprocess
@@ -155,7 +159,7 @@ class TailscaleMonitor:
             if result.returncode == 0:
                 return json.loads(result.stdout)
         except (subprocess.TimeoutExpired, FileNotFoundError, json.JSONDecodeError):
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
         return {}
 
     def parse_nodes(self, status: dict) -> list[TailscaleNode]:
@@ -202,7 +206,7 @@ class TailscaleMonitor:
                             "expires_in_days": days_until,
                         })
                 except (ValueError, TypeError):
-                    pass
+                    _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
             # Check for untagged nodes
             if not node.tags:

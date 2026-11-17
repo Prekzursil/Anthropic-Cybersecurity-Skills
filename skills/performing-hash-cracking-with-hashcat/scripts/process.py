@@ -15,7 +15,6 @@ Usage:
     python process.py create-test-hashes --output test_hashes.txt
 """
 
-import os
 import re
 import json
 import hashlib

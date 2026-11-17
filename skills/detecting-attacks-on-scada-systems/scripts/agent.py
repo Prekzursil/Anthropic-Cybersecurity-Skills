@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """SCADA system attack detection agent."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -47,7 +51,7 @@ def scan_scada_services(host):
                 })
             sock.close()
         except socket.error:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return results
 
 

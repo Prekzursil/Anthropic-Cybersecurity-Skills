@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Cloud WAF rules management agent using AWS WAFv2 boto3 client."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -174,7 +178,7 @@ def run_waf_audit(region="us-east-1", scope="REGIONAL"):
             for r in rules:
                 print(f"      [{r['Priority']}] {r['Name']}")
         except ClientError:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     print(f"\n--- AVAILABLE MANAGED RULE GROUPS ---")
     for mrg in MANAGED_RULE_GROUPS:

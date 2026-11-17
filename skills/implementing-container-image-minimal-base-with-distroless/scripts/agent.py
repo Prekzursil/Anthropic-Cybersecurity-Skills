@@ -4,6 +4,8 @@
 import argparse
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import os
 import subprocess
 from datetime import datetime
@@ -83,7 +85,7 @@ def check_distroless_properties(image: str) -> dict:
             capture_output=True, text=True, timeout=10)
         checks["has_shell"] = "shell_exists" in result.stdout
     except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     try:
         for pm in ["apt", "apk", "yum", "dnf"]:
             result = subprocess.run(
@@ -93,7 +95,7 @@ def check_distroless_properties(image: str) -> dict:
                 checks["has_package_manager"] = True
                 break
     except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return checks
 
 

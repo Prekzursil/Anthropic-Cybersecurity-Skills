@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for XSS testing workflows complementing Burp Suite during authorized assessments."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import requests
 import re
@@ -153,7 +157,7 @@ def analyze_csp(base_url):
         if not weaknesses:
             print(f"  [+] CSP appears well-configured")
     except requests.RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return findings
 
 

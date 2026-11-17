@@ -18,6 +18,10 @@ Usage:
 Requirements:
     pip install requests dnspython rich jinja2
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import csv
@@ -228,7 +232,7 @@ def validate_email_authentication(domain: str) -> dict:
                     results["dkim"]["record"] = f"Selector: {selector} - {txt[:100]}..."
                     break
         except Exception:
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
         if results["dkim"]["configured"]:
             break
 

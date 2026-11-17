@@ -9,7 +9,6 @@ summary reports for AWS security posture assessment.
 import json
 import subprocess
 import sys
-import os
 from datetime import datetime
 from pathlib import Path
 from collections import defaultdict

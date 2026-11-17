@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """HSM key storage management agent using PKCS#11 and AWS CloudHSM."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -67,7 +71,7 @@ def audit_kms_keys(session):
                         "origin": meta.get("Origin", ""),
                     })
             except ClientError:
-                pass
+                _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return custom_store_keys
 
 

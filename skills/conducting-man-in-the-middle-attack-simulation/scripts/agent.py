@@ -4,6 +4,8 @@
 
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import argparse
 import time
 from datetime import datetime
@@ -107,7 +109,7 @@ def test_ssl_stripping_potential(target_ip, gateway_ip):
                 "ssl_strip_feasible": data.get("status") != "preloaded",
             }
     except Exception:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return {"target": target_ip, "preloaded": False, "ssl_strip_feasible": True}
 
 
@@ -129,7 +131,7 @@ def run_mitm_simulation(target_ip, gateway_ip, interface, duration=30):
             arp_spoof(gateway_ip, target_ip, gateway_mac)
             time.sleep(1)
     except KeyboardInterrupt:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     finally:
         arp_restore(target_ip, gateway_ip, target_mac, gateway_mac)
         arp_restore(gateway_ip, target_ip, gateway_mac, gateway_mac)

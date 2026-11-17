@@ -5,7 +5,6 @@ Automates creation, import, and analysis of forensic timelines in Timesketch.
 
 import json
 import csv
-import os
 import subprocess
 from pathlib import Path
 

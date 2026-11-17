@@ -4,13 +4,15 @@
 
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import argparse
 import subprocess
 from datetime import datetime
 
 from scapy.all import (
     Dot11, Dot11Beacon, Dot11Elt, Dot11ProbeReq, Dot11Auth,
-    sniff, RadioTap, sendp, conf,
+    sniff, RadioTap, sendp,
 )
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -84,7 +86,7 @@ def capture_handshake(interface, target_bssid, channel, output_file, duration=60
     try:
         subprocess.run(cmd, timeout=duration, capture_output=True)
     except subprocess.TimeoutExpired:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return f"{output_file}-01.cap"
 
 
@@ -136,7 +138,7 @@ def check_wps_enabled(interface, target_bssid):
             logger.warning("WPS enabled on %s - vulnerable to Reaver attack", target_bssid)
             return True
     except (subprocess.TimeoutExpired, FileNotFoundError):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return False
 
 

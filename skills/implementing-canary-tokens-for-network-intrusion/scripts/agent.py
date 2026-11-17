@@ -8,7 +8,6 @@ with Slack, Microsoft Teams, email, and generic HTTP endpoints.
 """
 
 import os
-import sys
 import json
 import uuid
 import argparse

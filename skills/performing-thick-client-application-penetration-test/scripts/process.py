@@ -8,10 +8,13 @@ config file scanning, and DLL dependency analysis.
 Usage:
     python process.py --app-dir "C:/Program Files/TargetApp" --output ./results
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import os
 import re
-import json
 import argparse
 import datetime
 from pathlib import Path
@@ -45,7 +48,7 @@ def extract_strings(filepath: str, min_length: int = 8) -> list[str]:
         if len(current) >= min_length:
             strings.append("".join(current))
     except (PermissionError, OSError):
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
     return strings
 
 

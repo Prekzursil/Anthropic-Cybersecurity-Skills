@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for testing XXE injection vulnerabilities during authorized assessments."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import requests
 import json
@@ -100,7 +104,7 @@ def test_content_type_switch(base_url, endpoint, token=None):
             print(f"  [!] Endpoint accepts both JSON ({json_resp.status_code}) and XML ({xml_resp.status_code})")
             return True
     except requests.RequestException:
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return False
 
 

@@ -5,10 +5,13 @@ Container Drift Detection Tool
 Compares running containers against their original image state
 to detect filesystem drift, unexpected processes, and configuration changes.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import subprocess
-import sys
 import argparse
 from datetime import datetime
 
@@ -102,7 +105,7 @@ def check_readonly_filesystem(namespace: str = "") -> list[dict]:
                         "description": f"Container {container['name']} has writable root filesystem"
                     })
     except (json.JSONDecodeError, KeyError):
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     return findings
 
@@ -148,7 +151,7 @@ def check_pod_security_standards(namespace: str = "") -> list[dict]:
                     "description": f"Namespace {ns_name} lacks Pod Security Standards enforcement"
                 })
     except (json.JSONDecodeError, KeyError):
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     return findings
 

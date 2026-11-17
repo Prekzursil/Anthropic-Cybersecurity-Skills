@@ -17,7 +17,6 @@ Usage:
 
 import os
 import json
-import time
 import base64
 import argparse
 import logging

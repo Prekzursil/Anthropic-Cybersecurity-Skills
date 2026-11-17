@@ -6,6 +6,10 @@ decision tree to produce actionable priorities: Track, Track*,
 Attend, or Act based on exploitation status, technical impact,
 automatability, and mission prevalence.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -109,7 +113,7 @@ class SSVCTriageAgent:
                         "percentile": float(data[0].get("percentile", 0)),
                     }
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
         return None
 
     def determine_exploitation(self, cve_id):

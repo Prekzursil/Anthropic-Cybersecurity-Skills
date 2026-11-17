@@ -19,6 +19,10 @@ Usage:
 Requirements:
     pip install requests dnspython whois beautifulsoup4 rich
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -59,9 +63,9 @@ def resolve_dns_records(domain: str) -> dict:
             answers = dns.resolver.resolve(domain, rtype)
             records[rtype] = [str(rdata) for rdata in answers]
         except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN, dns.resolver.NoNameservers):
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
         except Exception:
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     return records
 
@@ -102,7 +106,7 @@ def enumerate_subdomains_ct(domain: str) -> list[str]:
             dns.resolver.resolve(subdomain, "A")
             subdomains.add(subdomain)
         except Exception:
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     return sorted(subdomains)
 
@@ -159,7 +163,7 @@ def discover_email_format(domain: str) -> dict:
             emails = email_pattern.findall(response.text)
             result["discovered_emails"] = list(set(emails))
     except Exception:
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     # Search for emails on common pages
     common_pages = ["/contact", "/about", "/team", "/about-us", "/contact-us"]
@@ -174,7 +178,7 @@ def discover_email_format(domain: str) -> dict:
                 emails = email_pattern.findall(response.text)
                 result["discovered_emails"].extend(emails)
         except Exception:
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     result["discovered_emails"] = list(set(result["discovered_emails"]))
     return result
@@ -343,7 +347,7 @@ def check_security_txt(domain: str) -> dict | None:
                     "content": response.text[:2000],
                 }
         except Exception:
-            pass
+            _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
 
     return None
 
@@ -364,7 +368,7 @@ def check_robots_txt(domain: str) -> dict | None:
                 "disallowed_paths": disallowed,
             }
     except Exception:
-        pass
+        _logger.debug("suppressed in process.py: %s", exception, exc_info=True)
     return None
 
 

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Agent for detecting suspicious PowerShell execution patterns."""
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
@@ -77,7 +81,7 @@ def analyze_script_content(script_text):
             if any(c.lower() in decoded.lower() for c in SUSPICIOUS_CMDLETS[:10]):
                 findings.append({"type": "encoded_payload", "preview": decoded[:100]})
         except Exception:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
 
     return findings
 

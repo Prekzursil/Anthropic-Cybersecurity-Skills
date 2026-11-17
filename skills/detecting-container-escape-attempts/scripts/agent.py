@@ -4,14 +4,16 @@
 Monitors for container escape indicators by parsing Falco JSON alerts,
 auditd logs, and Docker inspect data for privileged/vulnerable containers.
 """
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 import argparse
 import json
 import re
 import subprocess
-import sys
 from datetime import datetime
-from pathlib import Path
 
 ESCAPE_VECTORS = {
     "nsenter": {"severity": "CRITICAL", "mitre": "T1611", "desc": "Namespace escape via nsenter"},
@@ -109,7 +111,7 @@ def check_privileged_containers():
                         "severity": "CRITICAL" if "privileged_mode" in findings else "HIGH",
                     })
     except (subprocess.TimeoutExpired, FileNotFoundError):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return containers
 
 
@@ -125,7 +127,7 @@ def check_dangerous_capabilities(container_id):
             found = caps & dangerous_caps
             return [{"capability": c, "severity": "CRITICAL"} for c in found]
     except (subprocess.TimeoutExpired, FileNotFoundError):
-        pass
+        _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return []
 
 

@@ -9,7 +9,6 @@ opportunities without requiring the BloodHound GUI.
 
 import json
 import os
-import sys
 from collections import defaultdict
 from dataclasses import dataclass, field
 

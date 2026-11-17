@@ -3,6 +3,8 @@
 
 import json
 import logging
+
+_logger = logging.getLogger(__name__)
 import argparse
 import os
 import re
@@ -73,7 +75,7 @@ def enrich_ioc(value, ioc_type, vt_key=None, abuseipdb_key=None):
                 enrichment["vt_malicious"] = data.get("malicious", 0)
                 enrichment["sources"].append("virustotal")
         except requests.RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     elif ioc_type == "ipv4" and abuseipdb_key:
         try:
             resp = requests.get("https://api.abuseipdb.com/api/v2/check",
@@ -84,7 +86,7 @@ def enrich_ioc(value, ioc_type, vt_key=None, abuseipdb_key=None):
                 enrichment["abuse_score"] = data.get("abuseConfidenceScore", 0)
                 enrichment["sources"].append("abuseipdb")
         except requests.RequestException:
-            pass
+            _logger.debug("suppressed in agent.py: %s", exception, exc_info=True)
     return enrichment
 
 
